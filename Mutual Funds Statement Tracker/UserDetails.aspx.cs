@@ -135,10 +135,10 @@ namespace Mutual_Funds_Statement_Tracker
                         specificPeriodRadioClick.Click();
 
                     //Set Start Date
-                    //SetCalendarDate(driver, "Open calender", new DateTime(1990, 1, 1));
+                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-8 ng-star-inserted", new DateTime(1990, 1, 1), ref responseMsg);
 
                     //Set End Date
-                    //SetCalendarDate(driver, "Open calender", DateTime.Now);
+                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-9 ng-star-inserted", DateTime.Now, ref responseMsg);
 
                     IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-9' and @value = 'Y']")));
                     if (withZeroRadioClick != null)
@@ -209,19 +209,71 @@ namespace Mutual_Funds_Statement_Tracker
             }
         }
 
-        private void SetCalendarDate(IWebDriver driver, string id, DateTime date)
+        private void SetCalendarDate(DefaultWait<IWebDriver> fluentWait, string className, DateTime date, ref string responseMsg)
         {
-            //*****Day selection started.
-            //Click Datepicker
-            driver.FindElement(By.Id(id)).Click();
-            string year = date.Year.ToString();
-            string month = date.Month.ToString();
-            string day = date.Day.ToString();
-            //driver.FindElements(By.CssSelector("button[data-pika-year=" + year +"][data-pika-month=" + month + "][data-pika-day=" + day+ "]")).get(0).click();
-            //*****day selection finished.
+            try
+            {
+                logger.Info("Setting date: " + date.ToString("dd-MMM-yyyy"));
+                //*****Day selection started.
+                //Click Datepicker
+                IWebElement datePicker = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='" + className + "']/mat-datepicker-toggle/button[@aria-label='Open calendar']")));
+                datePicker.Click();
 
-            //Check the operation in 1 seconds
-            Thread.Sleep(1000);
+                int year = date.Year;
+                string monthBeginning = date.AddDays(-date.Day + 1).ToString("dd-MMM-yyyy");
+                string exactDateFormat = date.ToString("dd-MMM-yyyy");
+
+                IWebElement choseDate = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']")));
+                choseDate.Click();
+
+                IWebElement yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                string[] years = yearRange.Text.Split('–');
+                int startYear = Convert.ToInt32(years[0].Trim());
+                int endYear = Convert.ToInt32(years[1].Trim());
+                IWebElement prevButton = null;
+                IWebElement nextButton = null;
+                if (year < startYear)
+                {
+                    prevButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-previous-button mat-icon-button']")));
+                    while (year < startYear)
+                    {
+                        prevButton.Click();
+                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                        years = yearRange.Text.Split('–');
+                        startYear = Convert.ToInt32(years[0].Trim());
+                        endYear = Convert.ToInt32(years[1].Trim());
+                    }
+                }
+                else if (year > endYear)
+                {
+                    nextButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-next-button mat-icon-button']")));
+                    while (year > endYear)
+                    {
+                        nextButton.Click();
+                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                        years = yearRange.Text.Split('–');
+                        startYear = Convert.ToInt32(years[0].Trim());
+                        endYear = Convert.ToInt32(years[1].Trim());
+                    }
+                }
+                IWebElement clickYear = fluentWait.Until(a => a.FindElement(By.XPath("//td[(@class='mat-calendar-body-cell ng-star-inserted' or @class='mat-calendar-body-cell mat-calendar-body-active ng-star-inserted') and @aria-label='" + year + "']")));
+                clickYear.Click();
+                IWebElement clickMonth = fluentWait.Until(a => a.FindElement(By.XPath("//td[(@class='mat-calendar-body-cell ng-star-inserted' or @class='mat-calendar-body-cell mat-calendar-body-active ng-star-inserted') and @aria-label='" + monthBeginning + "']")));
+                clickMonth.Click();
+                IWebElement clickDay = fluentWait.Until(a => a.FindElement(By.XPath("//td[(@class='mat-calendar-body-cell ng-star-inserted' or @class='mat-calendar-body-cell mat-calendar-body-active ng-star-inserted') and @aria-label='" + exactDateFormat + "']")));
+                clickDay.Click();
+
+                logger.Info("Date set successful: " + date.ToString("dd-MMM-yyyy"));
+                //*****day selection finished.
+            }
+            catch (Exception ex)
+            {
+                responseMsg += "Statement generation not successful";
+                logger.Info(responseMsg);
+                logger.Error("Error while setting date: " + date.ToString("dd-MMM-yyyy"));
+                logger.Error(ex.Message + "\nInner Ex: " + ex.InnerException);
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+            }
         }
     }
 }
