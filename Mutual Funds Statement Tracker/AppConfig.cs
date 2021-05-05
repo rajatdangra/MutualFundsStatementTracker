@@ -11,6 +11,10 @@ namespace Mutual_Funds_Statement_Tracker
         public static string Email => Convert.ToString(ConfigurationManager.AppSettings["Email"]);
         public static string Password => Convert.ToString(ConfigurationManager.AppSettings["Password"]);
         public static string PAN => Convert.ToString(ConfigurationManager.AppSettings["PAN"]);
+        public static string Phone => Convert.ToString(ConfigurationManager.AppSettings["Phone"]);
+        public static string FirstName => Convert.ToString(ConfigurationManager.AppSettings["FirstName"]);
+        public static string LastName => Convert.ToString(ConfigurationManager.AppSettings["LastName"]);
+        public static string SaveUserDetails => Convert.ToString(ConfigurationManager.AppSettings["SaveUserDetails"]);
         public static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
         public static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
         public static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);

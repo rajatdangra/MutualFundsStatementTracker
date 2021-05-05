@@ -5,6 +5,8 @@ using System.Threading;
 using NLog;
 using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
+using System.Configuration;
+using System.Collections.Generic;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -26,7 +28,10 @@ namespace Mutual_Funds_Statement_Tracker
                     email.Text = AppConfig.Email;
                     pan.Text = AppConfig.PAN;
                     password.Text = AppConfig.Password;
-
+                    firstname.Text = AppConfig.FirstName;
+                    lastname.Text = AppConfig.LastName;
+                    phone.Text = AppConfig.Phone;
+                    saveUserDetails.Checked = (Convert.ToInt32(AppConfig.SaveUserDetails) == 1);
                     if (Convert.ToInt32(AppConfig.IsAutomated) == 1)
                     {
                         logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
@@ -71,8 +76,14 @@ namespace Mutual_Funds_Statement_Tracker
                 {
                     UserProfile user = new UserProfile(email.Text, pan.Text, password.Text) { FirstName = firstname.Text, LastName = lastname.Text, Phone = phone.Text };
                     logger.Info("User Details: " + user.ToString());
-                    logger.Info("Details Submitted. Navigating to RTA website.");
                     UserDetailsFormError.Visible = false;
+                    if (saveUserDetails.Checked)
+                    {
+                        logger.Info("Saving User Details");
+                        UpdateConfig();
+                    }
+
+                    logger.Info("Details Submitted. Navigating to RTA website.");
                     string responseMessage = string.Empty;
                     Navigate(rta_url.Value, out responseMessage);
                     UserDetailsResponse.InnerText = responseMessage;
@@ -323,6 +334,69 @@ namespace Mutual_Funds_Statement_Tracker
                 logger.Error("Error while setting date: " + date.ToString("dd-MMM-yyyy"));
                 logger.Error(ex.Message + "\nInner Ex: " + ex.InnerException);
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+            }
+        }
+
+        public void UpdateConfig()
+        {
+            logger.Info("UpdateConfig started");
+            try
+            {
+                System.Configuration.Configuration configFile = null;
+                if (System.Web.HttpContext.Current != null)
+                {
+                    configFile =
+                        System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+                }
+                else
+                {
+                    configFile =
+                        ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                }
+                var settings = configFile.AppSettings.Settings;
+
+                Dictionary<string, string> appSettings = new Dictionary<string, string>();
+                appSettings.Add("Email", email.Text);
+                appSettings.Add("PAN", pan.Text);
+                appSettings.Add("FirstName", firstname.Text);
+                appSettings.Add("Lastname", lastname.Text);
+                appSettings.Add("Phone", phone.Text);
+                appSettings.Add("Password", password.Text);
+
+                bool change = false;
+                foreach (var kv in appSettings)
+                {
+                    var key = kv.Key;
+                    var value = kv.Value;
+                    if (settings[key] == null)
+                    {
+                        logger.Warn("While reading the web.config, this line had no key/value attributes modify: " + key);
+                        //settings.Add(key, value);
+                    }
+                    else if (settings[key].Value != value)
+                    {
+                        change = true;
+                        settings[key].Value = value;
+                    }
+                }
+                if (change)
+                {
+                    configFile.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+                    logger.Info("Updated web.config file");
+                }
+                else
+                {
+                    logger.Info("No need to update web.config file because appsetting are accurate in web.config file");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Info("Unable to update web.config file" + "\n" + ex);
+            }
+            finally
+            {
+                logger.Info("UpdateConfig end");
             }
         }
     }
