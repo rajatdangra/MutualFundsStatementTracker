@@ -26,6 +26,14 @@ namespace Mutual_Funds_Statement_Tracker
                     email.Text = AppConfig.Email;
                     pan.Text = AppConfig.PAN;
                     password.Text = AppConfig.Password;
+
+                    if (Convert.ToInt32(AppConfig.IsAutomated) == 1)
+                    {
+                        logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
+                        //Wait for 5 seconds
+                        Thread.Sleep(5000);
+                        OnSubmitButtonClicked(null, null);
+                    }
                 }
                 else
                 {

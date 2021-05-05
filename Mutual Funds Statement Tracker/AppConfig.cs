@@ -14,6 +14,7 @@ namespace Mutual_Funds_Statement_Tracker
         public static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
         public static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
         public static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);
+        public static string IsAutomated => Convert.ToString(ConfigurationManager.AppSettings["IsAutomated"]);
         public static string AggregatorEmailIds => Convert.ToString(ConfigurationManager.AppSettings["AggregatorEmailIds"]);
         public static string Mail_Subject => Convert.ToString(ConfigurationManager.AppSettings["Mail_Subject"]);
         public static string Retry_Count => Convert.ToString(ConfigurationManager.AppSettings["Retry_Count"]);
