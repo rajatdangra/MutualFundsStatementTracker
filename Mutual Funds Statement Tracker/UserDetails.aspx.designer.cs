@@ -11,7 +11,7 @@ namespace Mutual_Funds_Statement_Tracker
 {
 
 
-    public partial class UserDetails
+    public partial class MutualFundsStatementRequest
     {
 
         /// <summary>

@@ -1,20 +1,21 @@
-﻿<%@ Page Title="Mutual Funds Statement Request" Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="Mutual_Funds_Statement_Tracker.UserDetails" %>
+﻿<%@ Page Title="Mutual Funds Statement Request" Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="Mutual_Funds_Statement_Tracker.MutualFundsStatementRequest" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head id="UserDetailsHeader" runat="server">
+<h1>Mutual Funds Statement Request</h1>
+<head id="UserDetailsHeader" title="Mutual Funds Statement Request" runat="server">
     <title>User Details</title>
 </head>
 <body>
-    <form id="UserDetailsForm" runat="server" method="post" defaultfocus ="submit">
+    <form id="UserDetailsForm" runat="server" method="post" defaultfocus="submit">
 
-        <div id="UserDetailsFormError" runat="server">
+        <div id="UserDetailsFormError" runat="server" style="color: red">
             <span style="color: red">Please fill all mandatory fields.</span>
             <br />
             <br />
         </div>
-        
+
         <input type="hidden" runat="server" id="rta_url" name="rta_url" />
         <table>
             <tr>
@@ -56,8 +57,8 @@
             </tr>
         </table>
         <br />
-        <asp:Button ID="submit" Text="Submit" Width="120px" BackColor="#3399ff" BorderColor="Black" ForeColor="White" Font-Bold="true" runat="server" OnClick="OnSubmitButtonClicked" />
-        <div style="padding-top: 20px" id="UserDetailsResponse" runat="server">
+        <asp:Button ID="submit" Text="Submit" Width="120px" BackColor="#3399ff" BorderColor="Black" ForeColor="White" Font-Bold="true" runat="server" OnClick="OnSubmitButtonClicked" ToolTip="Submit details to RTA Url" />
+        <div style="padding-top: 20px; color: green" id="UserDetailsResponse" runat="server">
             <span style="color: greenyellow"></span>
             <br />
             <br />

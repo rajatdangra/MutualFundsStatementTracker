@@ -4,11 +4,12 @@ using System;
 using System.Threading;
 using NLog;
 using OpenQA.Selenium.Support.UI;
+using System.Text.RegularExpressions;
 
 namespace Mutual_Funds_Statement_Tracker
 {
     //* Set intial parameters from Web.config/AppConfig
-    public partial class UserDetails : System.Web.UI.Page
+    public partial class MutualFundsStatementRequest : System.Web.UI.Page
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         protected void Page_Load(object sender, EventArgs e)
@@ -22,14 +23,14 @@ namespace Mutual_Funds_Statement_Tracker
                 {
                     UserDetailsFormError.Visible = false; // error form
                     UserDetailsResponse.Visible = false;
+                    email.Text = AppConfig.Email;
+                    pan.Text = AppConfig.PAN;
+                    password.Text = AppConfig.Password;
                 }
                 else
                 {
                     //UserDetailsFormError.Visible = true;
                 }
-                email.Text = AppConfig.Email;
-                pan.Text = AppConfig.PAN;
-                password.Text = AppConfig.Password;
             }
             catch (Exception ex)
             {
@@ -41,6 +42,8 @@ namespace Mutual_Funds_Statement_Tracker
         {
             UserDetailsResponse.Visible = false;
             UserDetailsResponse.InnerText = string.Empty;
+            UserDetailsFormError.Visible = false;
+            UserDetailsFormError.InnerText = string.Empty;
             try
             {
                 if (
@@ -52,10 +55,14 @@ namespace Mutual_Funds_Statement_Tracker
                     //error
                     logger.Error("Missing user details.");
                     UserDetailsFormError.Visible = true;
+                    string errorMsg = "Please fill all mandatory fields";
+                    UserDetailsFormError.InnerText = "< span style = 'color:red' > " + errorMsg + " </ span >";
                     return;
                 }
-                else
+                else if (ValidateParameters())
                 {
+                    UserProfile user = new UserProfile(email.Text, pan.Text, password.Text) { FirstName = firstname.Text, LastName = lastname.Text, Phone = phone.Text };
+                    logger.Info("User Details: " + user.ToString());
                     logger.Info("Details Submitted. Navigating to RTA website.");
                     UserDetailsFormError.Visible = false;
                     string responseMessage = string.Empty;
@@ -69,6 +76,41 @@ namespace Mutual_Funds_Statement_Tracker
                 logger.Error(ex.Message);
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
             }
+        }
+
+        private bool ValidateParameters()
+        {
+            bool isValid = true;
+            string errorMsg = "";
+            if (!IsValidEmail(email.Text))
+            {
+                isValid = false;
+                errorMsg += email.Text + " is an Invalid Email Address.";
+            }
+            if (!IsValidPAN(pan.Text))
+            {
+                isValid = false;
+                errorMsg += pan.Text + " is an Invalid PAN.";
+            }
+            if (!string.IsNullOrEmpty(errorMsg))
+            {
+                UserDetailsFormError.Visible = true;
+                UserDetailsFormError.InnerText = errorMsg;
+                logger.Error(errorMsg);
+            }
+            return isValid;
+        }
+        private bool IsValidEmail(string email)
+        {
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(email);
+            return match.Success;
+        }
+        private bool IsValidPAN(string pan)
+        {
+            Regex regex = new Regex("([A-Z]){5}([0-9]){4}([A-Z]){1}$");
+            Match match = regex.Match(pan);
+            return match.Success;
         }
 
         private void Navigate(String url, out string responseMsg)
@@ -104,8 +146,8 @@ namespace Mutual_Funds_Statement_Tracker
                     logger.Info("Automation on RTA url started, setting all inputs.");
 
                     DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
-                    fluentWait.Timeout = TimeSpan.FromSeconds(10);
-                    fluentWait.PollingInterval = TimeSpan.FromMilliseconds(500);
+                    fluentWait.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.TimeOut));
+                    fluentWait.PollingInterval = TimeSpan.FromMilliseconds(Convert.ToInt32(AppConfig.PollingTime));
                     /* Ignore the exception - NoSuchElementException that indicates that the element is not present */
                     fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
                     fluentWait.IgnoreExceptionTypes(typeof(ElementNotVisibleException));
@@ -275,5 +317,21 @@ namespace Mutual_Funds_Statement_Tracker
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
             }
         }
+    }
+
+    public class UserProfile
+    {
+        public UserProfile(string email, string pan, string password)
+        {
+            Email = email;
+            PAN = pan;
+            Password = password;
+        }
+        public string FirstName;
+        public string LastName;
+        public string Email;
+        public string PAN;
+        public string Password;
+        public string Phone;
     }
 }
