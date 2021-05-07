@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Web;
+using System.Text;
+using System.Collections.Specialized;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -31,18 +33,39 @@ namespace Mutual_Funds_Statement_Tracker
                     UserDetailsResponse.Visible = false;
 
                     //Initialize values
+                    bool isDataInitialized = false;
                     HttpCookie cookie = GetCookies();
                     if (cookie != null)
                     {
-                        email.Text = cookie["Email"].ToString();
-                        pan.Text = cookie["PAN"].ToString();
-                        password.Text = cookie["Password"].ToString();
-                        firstname.Text = cookie["FirstName"].ToString();
-                        lastname.Text = cookie["LastName"].ToString();
-                        phone.Text = cookie["Phone"].ToString();
+                        string decryptedData = AESEncryption.DecryptAndroid(cookie["Data"]);
+                        if (decryptedData != null)
+                        {
+                            isDataInitialized = true;
+                            logger.Info(decryptedData);
+                            NameValueCollection Params = new NameValueCollection();
+                            string[] segments = decryptedData.Split('&');
+                            foreach (string seg in segments)
+                            {
+                                string[] parts = seg.Split('=');
+                                if (parts.Length > 1)
+                                {
+                                    string Key = parts[0].Trim();
+                                    string Value = parts[1].Trim();
+                                    Params.Add(Key, Value);
+                                }
+                            }
+
+                            email.Text = Params.Get("Email");
+                            pan.Text = Params.Get("PAN");
+                            password.Text = Params.Get("Password");
+                            firstname.Text = Params.Get("FirstName");
+                            lastname.Text = Params.Get("LastName");
+                            phone.Text = Params.Get("Phone");
+                        }
                         saveUserDetails.Checked = AppConfig.SaveUserDetails;
                     }
-                    else
+
+                    if(!isDataInitialized)
                     {
                         email.Text = AppConfig.Email;
                         pan.Text = AppConfig.PAN;
@@ -110,7 +133,7 @@ namespace Mutual_Funds_Statement_Tracker
                     UserDetailsResponse.InnerText = responseMessage;
                     UserDetailsResponse.Visible = true;
 
-                    if(AppConfig.IsAutomated)
+                    if (AppConfig.IsAutomated)
                     {
 
                     }
@@ -365,17 +388,29 @@ namespace Mutual_Funds_Statement_Tracker
 
         private void SetCookies()
         {
+            StringBuilder data = new StringBuilder();
+            data.Append("SessionID" + "=" + Session.SessionID + "&");
+            data.Append("Email" + "=" + email.Text + "&");
+            data.Append("PAN" + "=" + pan.Text + "&");
+            data.Append("Password" + "=" + password.Text + "&");
+            data.Append("FirstName" + "=" + firstname.Text + "&");
+            data.Append("LastName" + "=" + lastname.Text + "&");
+            data.Append("Phone" + "=" + phone.Text + "&");
+            var encryptedData = AESEncryption.EncryptAndroid(Convert.ToString(data));
+
             HttpCookie userInfo = new HttpCookie(cookieName);
             userInfo.Secure = true;
-            userInfo["SessionID"] = Session.SessionID;
-            userInfo["Email"] = email.Text;
-            userInfo["PAN"] = pan.Text;
-            userInfo["Password"] = password.Text;
-            userInfo["FirstName"] = firstname.Text;
-            userInfo["LastName"] = lastname.Text;
-            userInfo["Phone"] = phone.Text;
+            //userInfo["SessionID"] = Session.SessionID;
+            //userInfo["Email"] = email.Text;
+            //userInfo["PAN"] = pan.Text;
+            //userInfo["Password"] = password.Text;
+            //userInfo["FirstName"] = firstname.Text;
+            //userInfo["LastName"] = lastname.Text;
+            //userInfo["Phone"] = phone.Text;
+            userInfo["Data"] = encryptedData;
             userInfo.Expires = DateTime.Now.AddMonths(Convert.ToInt32(AppConfig.CookieExpiry));
             Response.Cookies.Add(userInfo);
+            logger.Info("Data: " + Convert.ToString(encryptedData));
         }
         private HttpCookie GetCookies()
         {
