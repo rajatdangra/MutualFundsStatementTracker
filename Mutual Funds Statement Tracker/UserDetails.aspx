@@ -52,7 +52,7 @@
                 <td>
                     <asp:TextBox ID="phone" runat="server" /></td>
             </tr>
-            <tr>
+            <tr hidden="hidden">
                 <td>Save Details: </td>
                 <td>
                     <asp:CheckBox ID="saveUserDetails" runat="server" ToolTip="User details will be saved" /></td>

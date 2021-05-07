@@ -14,6 +14,7 @@ namespace Mutual_Funds_Statement_Tracker
         internal static string Phone => Convert.ToString(ConfigurationManager.AppSettings["Phone"]);
         internal static string FirstName => Convert.ToString(ConfigurationManager.AppSettings["FirstName"]);
         internal static string LastName => Convert.ToString(ConfigurationManager.AppSettings["LastName"]);
+        internal static string CookieExpiry => Convert.ToString(ConfigurationManager.AppSettings["CookieExpiry"]);
         internal static bool SaveUserDetails => String.Equals(ConfigurationManager.AppSettings["SaveUserDetails"], "1");
         internal static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
         internal static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);

@@ -7,6 +7,7 @@ using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
 using System.Configuration;
 using System.Collections.Generic;
+using System.Web;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -14,6 +15,9 @@ namespace Mutual_Funds_Statement_Tracker
     public partial class MutualFundsStatementRequest : System.Web.UI.Page
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        private const string cookieName = "UserDetails";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             logger.Info("Process Started");
@@ -25,13 +29,29 @@ namespace Mutual_Funds_Statement_Tracker
                 {
                     UserDetailsFormError.Visible = false; // error form
                     UserDetailsResponse.Visible = false;
-                    email.Text = AppConfig.Email;
-                    pan.Text = AppConfig.PAN;
-                    password.Text = AppConfig.Password;
-                    firstname.Text = AppConfig.FirstName;
-                    lastname.Text = AppConfig.LastName;
-                    phone.Text = AppConfig.Phone;
-                    saveUserDetails.Checked = AppConfig.SaveUserDetails;
+
+                    //Initialize values
+                    HttpCookie cookie = GetCookies();
+                    if (cookie != null)
+                    {
+                        email.Text = cookie["Email"].ToString();
+                        pan.Text = cookie["PAN"].ToString();
+                        password.Text = cookie["Password"].ToString();
+                        firstname.Text = cookie["FirstName"].ToString();
+                        lastname.Text = cookie["LastName"].ToString();
+                        phone.Text = cookie["Phone"].ToString();
+                        saveUserDetails.Checked = AppConfig.SaveUserDetails;
+                    }
+                    else
+                    {
+                        email.Text = AppConfig.Email;
+                        pan.Text = AppConfig.PAN;
+                        password.Text = AppConfig.Password;
+                        firstname.Text = AppConfig.FirstName;
+                        lastname.Text = AppConfig.LastName;
+                        phone.Text = AppConfig.Phone;
+                        saveUserDetails.Checked = AppConfig.SaveUserDetails;
+                    }
                     if (AppConfig.IsAutomated)
                     {
                         logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
@@ -76,6 +96,7 @@ namespace Mutual_Funds_Statement_Tracker
                 {
                     UserProfile user = new UserProfile(email.Text, pan.Text, password.Text) { FirstName = firstname.Text, LastName = lastname.Text, Phone = phone.Text };
                     logger.Info("User Details: " + user.ToString());
+                    SetCookies();
                     UserDetailsFormError.Visible = false;
                     if (saveUserDetails.Checked)
                     {
@@ -88,6 +109,11 @@ namespace Mutual_Funds_Statement_Tracker
                     Navigate(rta_url.Value, out responseMessage);
                     UserDetailsResponse.InnerText = responseMessage;
                     UserDetailsResponse.Visible = true;
+
+                    if(AppConfig.IsAutomated)
+                    {
+
+                    }
                 }
             }
             catch (Exception ex)
@@ -337,6 +363,25 @@ namespace Mutual_Funds_Statement_Tracker
             }
         }
 
+        private void SetCookies()
+        {
+            HttpCookie userInfo = new HttpCookie(cookieName);
+            userInfo.Secure = true;
+            userInfo["SessionID"] = Session.SessionID;
+            userInfo["Email"] = email.Text;
+            userInfo["PAN"] = pan.Text;
+            userInfo["Password"] = password.Text;
+            userInfo["FirstName"] = firstname.Text;
+            userInfo["LastName"] = lastname.Text;
+            userInfo["Phone"] = phone.Text;
+            userInfo.Expires = DateTime.Now.AddMonths(Convert.ToInt32(AppConfig.CookieExpiry));
+            Response.Cookies.Add(userInfo);
+        }
+        private HttpCookie GetCookies()
+        {
+            return Request.Cookies[cookieName];
+        }
+
         public void UpdateConfig()
         {
             logger.Info("UpdateConfig started");
@@ -399,21 +444,5 @@ namespace Mutual_Funds_Statement_Tracker
                 logger.Info("UpdateConfig end");
             }
         }
-    }
-
-    public class UserProfile
-    {
-        public UserProfile(string email, string pan, string password)
-        {
-            Email = email;
-            PAN = pan;
-            Password = password;
-        }
-        public string FirstName;
-        public string LastName;
-        public string Email;
-        public string PAN;
-        public string Password;
-        public string Phone;
     }
 }
