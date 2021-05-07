@@ -8,20 +8,21 @@ namespace Mutual_Funds_Statement_Tracker
 {
     public class AppConfig
     {
-        public static string Email => Convert.ToString(ConfigurationManager.AppSettings["Email"]);
-        public static string Password => Convert.ToString(ConfigurationManager.AppSettings["Password"]);
-        public static string PAN => Convert.ToString(ConfigurationManager.AppSettings["PAN"]);
-        public static string Phone => Convert.ToString(ConfigurationManager.AppSettings["Phone"]);
-        public static string FirstName => Convert.ToString(ConfigurationManager.AppSettings["FirstName"]);
-        public static string LastName => Convert.ToString(ConfigurationManager.AppSettings["LastName"]);
-        public static string SaveUserDetails => Convert.ToString(ConfigurationManager.AppSettings["SaveUserDetails"]);
-        public static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
-        public static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
-        public static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);
-        public static string IsAutomated => Convert.ToString(ConfigurationManager.AppSettings["IsAutomated"]);
-        public static string AggregatorEmailIds => Convert.ToString(ConfigurationManager.AppSettings["AggregatorEmailIds"]);
-        public static string Mail_Subject => Convert.ToString(ConfigurationManager.AppSettings["Mail_Subject"]);
-        public static string Retry_Count => Convert.ToString(ConfigurationManager.AppSettings["Retry_Count"]);
-        public static string Sync_Frequency => Convert.ToString(ConfigurationManager.AppSettings["Sync_Frequency"]);
+        internal static string Email => Convert.ToString(ConfigurationManager.AppSettings["Email"]);
+        internal static string Password => Convert.ToString(ConfigurationManager.AppSettings["Password"]);
+        internal static string PAN => Convert.ToString(ConfigurationManager.AppSettings["PAN"]);
+        internal static string Phone => Convert.ToString(ConfigurationManager.AppSettings["Phone"]);
+        internal static string FirstName => Convert.ToString(ConfigurationManager.AppSettings["FirstName"]);
+        internal static string LastName => Convert.ToString(ConfigurationManager.AppSettings["LastName"]);
+        internal static bool SaveUserDetails => String.Equals(ConfigurationManager.AppSettings["SaveUserDetails"], "1");
+        internal static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
+        internal static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
+        internal static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);
+        internal static bool IsAutomated => String.Equals(ConfigurationManager.AppSettings["IsAutomated"], "1");
+        //internal static bool IsAutomated => Convert.ToBoolean(ConfigurationManager.AppSettings["IsAutomated"]); //Use this for values = "true" or "false"
+        internal static string AggregatorEmailIds => Convert.ToString(ConfigurationManager.AppSettings["AggregatorEmailIds"]);
+        internal static string Mail_Subject => Convert.ToString(ConfigurationManager.AppSettings["Mail_Subject"]);
+        internal static string Retry_Count => Convert.ToString(ConfigurationManager.AppSettings["Retry_Count"]);
+        internal static string Sync_Frequency => Convert.ToString(ConfigurationManager.AppSettings["Sync_Frequency"]);
     }
 }

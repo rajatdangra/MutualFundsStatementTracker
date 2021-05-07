@@ -31,8 +31,8 @@ namespace Mutual_Funds_Statement_Tracker
                     firstname.Text = AppConfig.FirstName;
                     lastname.Text = AppConfig.LastName;
                     phone.Text = AppConfig.Phone;
-                    saveUserDetails.Checked = (Convert.ToInt32(AppConfig.SaveUserDetails) == 1);
-                    if (Convert.ToInt32(AppConfig.IsAutomated) == 1)
+                    saveUserDetails.Checked = AppConfig.SaveUserDetails;
+                    if (AppConfig.IsAutomated)
                     {
                         logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
                         //Wait for 5 seconds
