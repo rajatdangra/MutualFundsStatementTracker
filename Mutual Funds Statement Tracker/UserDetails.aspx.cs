@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Text;
 using System.Collections.Specialized;
+using System.Web.UI;
+using System.Threading.Tasks;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -65,7 +67,7 @@ namespace Mutual_Funds_Statement_Tracker
                         saveUserDetails.Checked = AppConfig.SaveUserDetails;
                     }
 
-                    if(!isDataInitialized)
+                    if (!isDataInitialized)
                     {
                         email.Text = AppConfig.Email;
                         pan.Text = AppConfig.PAN;
@@ -77,10 +79,7 @@ namespace Mutual_Funds_Statement_Tracker
                     }
                     if (AppConfig.IsAutomated)
                     {
-                        logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
-                        //Wait for 5 seconds
-                        Thread.Sleep(5000);
-                        OnSubmitButtonClicked(null, null);
+                        Task.Run(() => AutoSubmit());
                     }
                 }
                 else
@@ -92,6 +91,23 @@ namespace Mutual_Funds_Statement_Tracker
             {
                 Response.Write("<span style='color:red'>" + ex.Message + "</span>");
             }
+        }
+
+        public void AutoSubmit()
+        {
+            logger.Info("Automatic Process. Waiting for 5 seconds before auto submit.");
+            //Wait for 5 seconds
+            Thread.Sleep(5000);
+            OnSubmitButtonClicked(null, null);
+            AutoCloseBrowser();
+        }
+
+        public void AutoCloseBrowser()
+        {
+            logger.Info("Automatic Process. Waiting for 5 seconds before closing.");
+            //Wait for 5 seconds
+            Thread.Sleep(5000);
+            ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
         }
 
         protected void OnSubmitButtonClicked(object sender, EventArgs e)
@@ -132,11 +148,6 @@ namespace Mutual_Funds_Statement_Tracker
                     Navigate(rta_url.Value, out responseMessage);
                     UserDetailsResponse.InnerText = responseMessage;
                     UserDetailsResponse.Visible = true;
-
-                    if (AppConfig.IsAutomated)
-                    {
-
-                    }
                 }
             }
             catch (Exception ex)
@@ -245,7 +256,7 @@ namespace Mutual_Funds_Statement_Tracker
                         specificPeriodRadioClick.Click();
 
                     //Set Start Date
-                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-8 ng-star-inserted", new DateTime(1990, 1, 1), ref responseMsg);
+                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-8 ng-star-inserted", new DateTime(1990, 4, 1), ref responseMsg);
 
                     //Set End Date
                     SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-9 ng-star-inserted", DateTime.Now, ref responseMsg);
@@ -388,29 +399,37 @@ namespace Mutual_Funds_Statement_Tracker
 
         private void SetCookies()
         {
-            StringBuilder data = new StringBuilder();
-            data.Append("SessionID" + "=" + Session.SessionID + "&");
-            data.Append("Email" + "=" + email.Text + "&");
-            data.Append("PAN" + "=" + pan.Text + "&");
-            data.Append("Password" + "=" + password.Text + "&");
-            data.Append("FirstName" + "=" + firstname.Text + "&");
-            data.Append("LastName" + "=" + lastname.Text + "&");
-            data.Append("Phone" + "=" + phone.Text + "&");
-            var encryptedData = AESEncryption.EncryptAndroid(Convert.ToString(data));
+            try
+            {
+                logger.Info("Set cookies called.");
+                StringBuilder data = new StringBuilder();
+                data.Append("SessionID" + "=" + Session.SessionID + "&");
+                data.Append("Email" + "=" + email.Text + "&");
+                data.Append("PAN" + "=" + pan.Text + "&");
+                data.Append("Password" + "=" + password.Text + "&");
+                data.Append("FirstName" + "=" + firstname.Text + "&");
+                data.Append("LastName" + "=" + lastname.Text + "&");
+                data.Append("Phone" + "=" + phone.Text + "&");
+                var encryptedData = AESEncryption.EncryptAndroid(Convert.ToString(data));
 
-            HttpCookie userInfo = new HttpCookie(cookieName);
-            userInfo.Secure = true;
-            //userInfo["SessionID"] = Session.SessionID;
-            //userInfo["Email"] = email.Text;
-            //userInfo["PAN"] = pan.Text;
-            //userInfo["Password"] = password.Text;
-            //userInfo["FirstName"] = firstname.Text;
-            //userInfo["LastName"] = lastname.Text;
-            //userInfo["Phone"] = phone.Text;
-            userInfo["Data"] = encryptedData;
-            userInfo.Expires = DateTime.Now.AddMonths(Convert.ToInt32(AppConfig.CookieExpiry));
-            Response.Cookies.Add(userInfo);
-            logger.Info("Data: " + Convert.ToString(encryptedData));
+                HttpCookie userInfo = new HttpCookie(cookieName);
+                userInfo.Secure = true;
+                //userInfo["SessionID"] = Session.SessionID;
+                //userInfo["Email"] = email.Text;
+                //userInfo["PAN"] = pan.Text;
+                //userInfo["Password"] = password.Text;
+                //userInfo["FirstName"] = firstname.Text;
+                //userInfo["LastName"] = lastname.Text;
+                //userInfo["Phone"] = phone.Text;
+                userInfo["Data"] = encryptedData;
+                userInfo.Expires = DateTime.Now.AddMonths(Convert.ToInt32(AppConfig.CookieExpiry));
+                Response.Cookies.Add(userInfo);
+                logger.Info("Data: " + Convert.ToString(encryptedData));
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Unable to set cookies.\n" + ex);
+            }
         }
         private HttpCookie GetCookies()
         {

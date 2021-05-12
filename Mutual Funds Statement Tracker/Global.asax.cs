@@ -22,6 +22,14 @@ namespace Mutual_Funds_Statement_Tracker
 
         }
 
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (Request.Url.AbsolutePath.EndsWith("/"))
+            {
+                Server.Transfer(Request.Url.AbsolutePath + "UserDetails.aspx");
+            }
+        }
+
         void Application_End(object sender, EventArgs e)
         {
             //  Code that runs on application shutdown
