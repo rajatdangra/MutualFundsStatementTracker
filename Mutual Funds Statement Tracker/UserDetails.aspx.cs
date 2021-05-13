@@ -261,7 +261,7 @@ namespace Mutual_Funds_Statement_Tracker
                     //Set End Date
                     SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-9 ng-star-inserted", DateTime.Now, ref responseMsg);
 
-                    IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-9' and @value = 'Y']")));
+                    IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-8' and @value = 'N']")));
                     if (withZeroRadioClick != null)
                         withZeroRadioClick.Click();
 
