@@ -28,6 +28,19 @@ namespace Mutual_Funds_Statement_Tracker
             {
                 Server.Transfer(Request.Url.AbsolutePath + "UserDetails.aspx");
             }
+
+            bool forceToHttps = AppConfig.IsForceToHttps;
+            //Begin:To force redirect website to https
+            if (forceToHttps)
+            {
+                if (HttpContext.Current.Request.IsSecureConnection.Equals(false) && HttpContext.Current.Request.IsLocal.Equals(false))
+                {
+                    Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"]
+                + HttpContext.Current.Request.RawUrl);
+                }
+            }
+            Response.Headers.Remove("Access-Control-Allow-Origin");
+            // End: To force redirect website to https
         }
 
         void Application_End(object sender, EventArgs e)

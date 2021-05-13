@@ -20,10 +20,10 @@ namespace Mutual_Funds_Statement_Tracker
         internal static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
         internal static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);
         internal static bool IsAutomated => String.Equals(ConfigurationManager.AppSettings["IsAutomated"], "1");
-        //internal static bool IsAutomated => Convert.ToBoolean(ConfigurationManager.AppSettings["IsAutomated"]); //Use this for values = "true" or "false"
         internal static string AggregatorEmailIds => Convert.ToString(ConfigurationManager.AppSettings["AggregatorEmailIds"]);
         internal static string Mail_Subject => Convert.ToString(ConfigurationManager.AppSettings["Mail_Subject"]);
         internal static string Retry_Count => Convert.ToString(ConfigurationManager.AppSettings["Retry_Count"]);
         internal static string Sync_Frequency => Convert.ToString(ConfigurationManager.AppSettings["Sync_Frequency"]);
+        internal static bool IsForceToHttps => Convert.ToBoolean(ConfigurationManager.AppSettings["ForceToHttps"]);
     }
 }
