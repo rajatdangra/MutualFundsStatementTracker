@@ -114,13 +114,13 @@ namespace Mutual_Funds_Statement_Tracker
         protected global::System.Web.UI.WebControls.CheckBox saveUserDetails;
 
         /// <summary>
-        /// submit control.
+        /// submit_btn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submit;
+        protected global::System.Web.UI.HtmlControls.HtmlButton submit_btn;
 
         /// <summary>
         /// UserDetailsResponse control.
