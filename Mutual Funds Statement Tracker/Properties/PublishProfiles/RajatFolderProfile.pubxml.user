@@ -29,19 +29,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/16/2021 17:15:52</publishTime>
     </File>
     <File Include="bin/MailKit.pdb">
-      <publishTime>03/16/2021 17:15:52</publishTime>
+      <publishTime>05/30/2021 14:47:58</publishTime>
     </File>
     <File Include="bin/MimeKit.dll">
       <publishTime>03/12/2021 22:18:36</publishTime>
     </File>
     <File Include="bin/MimeKit.pdb">
-      <publishTime>03/12/2021 22:18:34</publishTime>
+      <publishTime>05/30/2021 14:47:59</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.dll">
-      <publishTime>05/12/2021 21:23:47</publishTime>
+      <publishTime>05/30/2021 14:50:45</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.pdb">
-      <publishTime>05/12/2021 21:23:47</publishTime>
+      <publishTime>05/30/2021 14:50:45</publishTime>
     </File>
     <File Include="bin/NLog.config">
       <publishTime>05/04/2021 02:35:07</publishTime>
@@ -77,7 +77,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/08/2021 03:52:29</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/12/2021 21:18:58</publishTime>
+      <publishTime>05/30/2021 14:50:46</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -52,9 +52,14 @@ namespace Mutual_Funds_Statement_Tracker
         void Application_Error(object sender, EventArgs e)
         {
             // Code that runs when an unhandled error occurs
-            HttpUnhandledException httpUnhandledException =
-       new HttpUnhandledException(Server.GetLastError().Message, Server.GetLastError());
-            SendEmailWithErrors(httpUnhandledException.GetHtmlErrorMessage());
+            HttpUnhandledException httpUnhandledException = new HttpUnhandledException(Server.GetLastError().Message, Server.GetLastError());
+
+            string errorInfo = httpUnhandledException.GetHtmlErrorMessage();
+            string detailedErrorInfo = string.Format("An error has been encountered in Mutual Funds Statement Request, Details are mentioned below:\nUser Name: {0}\nEmail: {1}\nPhone: {2}\nPAN: {3}\n\nError Information:\n{3}", AppConfig.FullName, AppConfig.Email, AppConfig.Phone, AppConfig.PAN, errorInfo);
+            logger.Error(detailedErrorInfo);
+            Console.WriteLine(detailedErrorInfo);
+
+            Email.SendEmail(detailedErrorInfo, "Mutual Fund Statement Request - Error Occured", Email.DeveloperEmail, Email.DeveloperName);
         }
 
         void Session_Start(object sender, EventArgs e)
@@ -70,35 +75,6 @@ namespace Mutual_Funds_Statement_Tracker
             // is set to InProc in the Web.config file. If session mode is set to StateServer 
             // or SQLServer, the event is not raised.
 
-        }
-
-        private static void SendEmailWithErrors(string result)
-        {
-            try
-            {
-                var mailMessage = new MimeMessage();
-                mailMessage.From.Add(new MailboxAddress("abc", "abc@gmail.com"));
-                mailMessage.To.Add(new MailboxAddress("def", "def@gmail.com"));
-                mailMessage.Subject = "Mutual Fund Statement Request - Error Occured";
-                mailMessage.Body = new TextPart("plain")
-                {
-                    Text = result
-                };
-
-                using (var smtpClient = new SmtpClient())
-                {
-                    //config settings should be picked from web.config
-                    smtpClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                    smtpClient.Authenticate("username", "password");
-                    smtpClient.Send(mailMessage);
-                    smtpClient.Disconnect(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Write o the event log.
-                logger.Error("Unable to send email.\nException details: " + ex + "\nInner Exception: " + ex.InnerException);
-            }
         }
     }
 }

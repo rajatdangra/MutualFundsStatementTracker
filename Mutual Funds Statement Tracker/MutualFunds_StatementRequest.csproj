@@ -139,6 +139,8 @@
     </Compile>
     <Compile Include="AESEncryption.cs" />
     <Compile Include="AppConfig.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Email.cs" />
     <Compile Include="UserDetails.aspx.cs">
       <DependentUpon>UserDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

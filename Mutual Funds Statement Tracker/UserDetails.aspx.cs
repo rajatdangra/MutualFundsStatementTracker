@@ -140,7 +140,8 @@ namespace Mutual_Funds_Statement_Tracker
                     if (saveUserDetails.Checked)
                     {
                         logger.Info("Saving User Details");
-                        UpdateConfig();
+                        AppConfig.UpdateConfig(user);
+                        logger.Info("Saved User Details");
                     }
 
                     logger.Info("Details Submitted. Navigating to RTA website.");
@@ -194,7 +195,7 @@ namespace Mutual_Funds_Statement_Tracker
 
         private void Navigate(String url, out string responseMsg)
         {
-            responseMsg = "[" + DateTime.Now.ToString("dd/MMM/yyyy hh:mm:ss tt") + "]: ";
+            responseMsg = "[" + DateTime.Now.ToDetailString() + "]: ";
             if (String.IsNullOrEmpty(url)) return;
             if (url.Equals("about:blank")) return;
             if (!url.StartsWith("http://") &&
@@ -434,69 +435,6 @@ namespace Mutual_Funds_Statement_Tracker
         private HttpCookie GetCookies()
         {
             return Request.Cookies[cookieName];
-        }
-
-        public void UpdateConfig()
-        {
-            logger.Info("UpdateConfig started");
-            try
-            {
-                System.Configuration.Configuration configFile = null;
-                if (System.Web.HttpContext.Current != null)
-                {
-                    configFile =
-                        System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-                }
-                else
-                {
-                    configFile =
-                        ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                }
-                var settings = configFile.AppSettings.Settings;
-
-                Dictionary<string, string> appSettings = new Dictionary<string, string>();
-                appSettings.Add("Email", email.Text);
-                appSettings.Add("PAN", pan.Text);
-                appSettings.Add("FirstName", firstname.Text);
-                appSettings.Add("Lastname", lastname.Text);
-                appSettings.Add("Phone", phone.Text);
-                appSettings.Add("Password", password.Text);
-
-                bool change = false;
-                foreach (var kv in appSettings)
-                {
-                    var key = kv.Key;
-                    var value = kv.Value;
-                    if (settings[key] == null)
-                    {
-                        logger.Warn("While reading the web.config, this line had no key/value attributes modify: " + key);
-                        //settings.Add(key, value);
-                    }
-                    else if (settings[key].Value != value)
-                    {
-                        change = true;
-                        settings[key].Value = value;
-                    }
-                }
-                if (change)
-                {
-                    configFile.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-                    logger.Info("Updated web.config file");
-                }
-                else
-                {
-                    logger.Info("No need to update web.config file because appsetting are accurate in web.config file");
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Info("Unable to update web.config file" + "\n" + ex);
-            }
-            finally
-            {
-                logger.Info("UpdateConfig end");
-            }
         }
     }
 }
