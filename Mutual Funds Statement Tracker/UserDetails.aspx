@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Mutual Funds Statement Request" Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="Mutual_Funds_Statement_Tracker.MutualFundsStatementRequest" %>
 
 <%@Import namespace="Mutual_Funds_Statement_Tracker" %>
-<link href="css/UserDetails.css" rel="stylesheet" />
+<link href="Styles/UserDetails.css" rel="stylesheet" />
 
 <!DOCTYPE html>
 
