@@ -38,10 +38,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/30/2021 14:47:59</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.dll">
-      <publishTime>05/30/2021 14:50:45</publishTime>
+      <publishTime>05/30/2021 20:03:30</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.pdb">
-      <publishTime>05/30/2021 14:50:45</publishTime>
+      <publishTime>05/30/2021 20:03:30</publishTime>
     </File>
     <File Include="bin/NLog.config">
       <publishTime>05/04/2021 02:35:07</publishTime>
@@ -73,11 +73,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Styles/Site.css">
       <publishTime>05/04/2021 02:35:07</publishTime>
     </File>
+    <File Include="Styles/UserDetails.css">
+      <publishTime>05/30/2021 16:28:58</publishTime>
+    </File>
     <File Include="UserDetails.aspx">
-      <publishTime>05/08/2021 03:52:29</publishTime>
+      <publishTime>05/30/2021 16:42:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/30/2021 14:50:46</publishTime>
+      <publishTime>05/30/2021 20:03:31</publishTime>
     </File>
   </ItemGroup>
 </Project>
