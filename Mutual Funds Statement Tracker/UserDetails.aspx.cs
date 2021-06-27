@@ -12,6 +12,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Web.UI;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Remote;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -215,11 +216,36 @@ namespace Mutual_Funds_Statement_Tracker
                 //ClientScript.RegisterStartupScript(this.GetType(),
                 //        "script", sb.ToString());
 
-                IWebDriver driver = new ChromeDriver(/*co*/);
+                ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+                driverService.HideCommandPromptWindow = true;
+
+                ChromeOptions chromeOptions = new ChromeOptions();
+                //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
+                //chromeOptions.AddArguments("--start-maximized"); //Maximize window
+                chromeOptions.AddArguments("--display"); //Maximize window
+                //chromeOptions.AddArguments("--window-size=1920,1080"); //Set Window size
+                chromeOptions.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
+                chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
+                chromeOptions.AddArgument("--disable-renderer-backgrounding");
+                chromeOptions.AddArgument("--disable-headless-mode");
+                chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
+                //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
+                //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
+                //chromeOptions.AddArgument("no-sandbox");
+                //chromeOptions.AddArguments("--headless"); //Hide visibility
+                //chromeOptions.LeaveBrowserRunning = false;
+
+                //DesiredCapabilities capabilities = new DesiredCapabilities();
+                //capabilities.SetCapability()
+                //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
+
+                logger.Info("Start Navigating to RTA URL: " + url);
+
+                IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
                 driver.Manage().Window.Maximize();
                 driver.Navigate().GoToUrl(url);
 
-                logger.Info("Navigate to RTA url successful");
+                logger.Info("Navigate to RTA url successful. URL: " + url);
 
                 try
                 {
