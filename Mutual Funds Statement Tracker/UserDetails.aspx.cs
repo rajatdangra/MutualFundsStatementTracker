@@ -216,8 +216,8 @@ namespace Mutual_Funds_Statement_Tracker
                 //ClientScript.RegisterStartupScript(this.GetType(),
                 //        "script", sb.ToString());
 
-                ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
-                driverService.HideCommandPromptWindow = true;
+                //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+                //driverService.HideCommandPromptWindow = true;
 
                 ChromeOptions chromeOptions = new ChromeOptions();
                 //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
@@ -234,14 +234,13 @@ namespace Mutual_Funds_Statement_Tracker
                 //chromeOptions.AddArgument("no-sandbox");
                 //chromeOptions.AddArguments("--headless"); //Hide visibility
                 //chromeOptions.LeaveBrowserRunning = false;
-
-                //DesiredCapabilities capabilities = new DesiredCapabilities();
-                //capabilities.SetCapability()
                 //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
 
                 logger.Info("Start Navigating to RTA URL: " + url);
 
-                IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
+                //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
+                var ip = "http://192.168.43.109:4444"; //Server IP
+                IWebDriver driver = new RemoteWebDriver(new Uri(ip + "/wd/hub"), chromeOptions);
                 driver.Manage().Window.Maximize();
                 driver.Navigate().GoToUrl(url);
 
