@@ -4,9 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using MailKit;
-using MailKit.Net.Smtp;
-using MimeKit;
+using Mutual_Funds_Statement_Tracker.Models;
 using NLog;
 
 namespace Mutual_Funds_Statement_Tracker
@@ -59,7 +57,8 @@ namespace Mutual_Funds_Statement_Tracker
             logger.Error(detailedErrorInfo);
             Console.WriteLine(detailedErrorInfo);
 
-            Email.SendEmail(detailedErrorInfo, "Mutual Fund Statement Request - Error Occured", Email.DeveloperEmail, Email.DeveloperName);
+            var emailObj = new Email("Mutual Fund Statement Request - Error Occured", Email.DeveloperEmail, Email.DeveloperName, isHTMLBody: false);
+            emailObj.SendEmail(detailedErrorInfo);
         }
 
         void Session_Start(object sender, EventArgs e)

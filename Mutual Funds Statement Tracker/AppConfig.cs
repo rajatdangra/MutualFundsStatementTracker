@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using Mutual_Funds_Statement_Tracker.Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

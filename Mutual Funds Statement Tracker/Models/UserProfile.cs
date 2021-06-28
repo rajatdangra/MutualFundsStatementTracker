@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Mutual_Funds_Statement_Tracker
+namespace Mutual_Funds_Statement_Tracker.Models
 {
     public class UserProfile
     {

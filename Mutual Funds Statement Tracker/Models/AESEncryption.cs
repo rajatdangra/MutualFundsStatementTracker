@@ -5,7 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Mutual_Funds_Statement_Tracker
+namespace Mutual_Funds_Statement_Tracker.Models
 {
     public class AESEncryption
     {

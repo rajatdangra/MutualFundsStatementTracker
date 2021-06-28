@@ -9,6 +9,14 @@
 *.exe
 *.o
 *.so
+*.pdb
+*.user
+*.suo
+*.cache
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+*.lib
 
 # Packages #
 ############
@@ -39,3 +47,16 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Published Profiles #
+######################
+*.[Pp]ublish.xml
+*.azurePubxml
+*.pubxml
+*.publishproj
+
+*.metaproj*
+
+#Ignore private folder
+/Private/
+**/Private
