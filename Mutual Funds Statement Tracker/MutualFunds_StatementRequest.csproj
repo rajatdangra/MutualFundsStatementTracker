@@ -116,6 +116,7 @@
     <Compile Include="AppConfig.cs" />
     <Compile Include="Methods\DateTimeExtensions.cs" />
     <Compile Include="Models\Email.cs" />
+    <Compile Include="Models\IPDetails.cs" />
     <Compile Include="Models\SeleniumAutomation.cs" />
     <Compile Include="Models\SeleniumResponse.cs" />
     <Compile Include="Private\PrivateData.cs" />

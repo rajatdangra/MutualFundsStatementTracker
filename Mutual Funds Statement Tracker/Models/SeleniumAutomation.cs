@@ -64,8 +64,10 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 logger.Info("Start Navigating to RTA URL: " + url);
 
                 //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
-                var ip = "http://192.168.43.109:4444"; //Server IP
-                IWebDriver driver = new RemoteWebDriver(new Uri(ip + "/wd/hub"), chromeOptions);
+                var ip = new IPDetails().GetLocalIPv4(); //Server IP
+                var port = AppConfig.Port;
+                var serverUrl = "http://" + ip + ":" + port;
+                IWebDriver driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
                 driver.Manage().Window.Maximize();
                 driver.Navigate().GoToUrl(url);
 
