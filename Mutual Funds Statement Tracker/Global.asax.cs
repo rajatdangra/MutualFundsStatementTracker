@@ -53,7 +53,7 @@ namespace Mutual_Funds_Statement_Tracker
             HttpUnhandledException httpUnhandledException = new HttpUnhandledException(Server.GetLastError().Message, Server.GetLastError());
 
             string errorInfo = httpUnhandledException.GetHtmlErrorMessage();
-            string detailedErrorInfo = string.Format("An error has been encountered in Mutual Funds Statement Request, Details are mentioned below:\nUser Name: {0}\nEmail: {1}\nPhone: {2}\nPAN: {3}\n\nError Information:\n{3}", AppConfig.FullName, AppConfig.Email, AppConfig.Phone, AppConfig.PAN, errorInfo);
+            string detailedErrorInfo = string.Format("An error has been encountered in Mutual Funds Statement Request, Details are mentioned below:\nUser Name: {0}\nEmail: {1}\nPhone: {2}\nPAN: {3}\n\nError Information:\n{4}", AppConfig.FullName, AppConfig.Email, AppConfig.Phone, AppConfig.PAN, errorInfo);
             logger.Error(detailedErrorInfo);
             Console.WriteLine(detailedErrorInfo);
 
