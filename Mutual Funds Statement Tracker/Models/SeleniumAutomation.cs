@@ -6,6 +6,7 @@ using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -41,33 +42,40 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 //ClientScript.RegisterStartupScript(this.GetType(),
                 //        "script", sb.ToString());
 
-                //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
-                //driverService.HideCommandPromptWindow = true;
-
-                ChromeOptions chromeOptions = new ChromeOptions();
-                //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
-                //chromeOptions.AddArguments("--start-maximized"); //Maximize window
-                chromeOptions.AddArguments("--display"); //Maximize window
-                //chromeOptions.AddArguments("--window-size=1920,1080"); //Set Window size
-                chromeOptions.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
-                chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
-                chromeOptions.AddArgument("--disable-renderer-backgrounding");
-                chromeOptions.AddArgument("--disable-headless-mode");
-                chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
-                //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
-                //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
-                //chromeOptions.AddArgument("no-sandbox");
-                //chromeOptions.AddArguments("--headless"); //Hide visibility
-                //chromeOptions.LeaveBrowserRunning = false;
-                //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
-
                 logger.Info("Start Navigating to RTA URL: " + url);
+                IWebDriver driver;
+                if (Debugger.IsAttached || !AppConfig.ShowAutomation)
+                {
+                    //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
+                    driver = new ChromeDriver();
+                }
+                else
+                {
+                    //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+                    //driverService.HideCommandPromptWindow = true;
 
-                //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
-                var ip = new IPDetails().GetLocalIPv4(); //Server IP
-                var port = AppConfig.Port;
-                var serverUrl = "http://" + ip + ":" + port;
-                IWebDriver driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
+                    //chromeOptions.AddArguments("--start-maximized"); //Maximize window
+                    chromeOptions.AddArguments("--display"); //Maximize window
+                                                             //chromeOptions.AddArguments("--window-size=1920,1080"); //Set Window size
+                    chromeOptions.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
+                    chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
+                    chromeOptions.AddArgument("--disable-renderer-backgrounding");
+                    chromeOptions.AddArgument("--disable-headless-mode");
+                    chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
+                    //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
+                    //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
+                    //chromeOptions.AddArgument("no-sandbox");
+                    //chromeOptions.AddArguments("--headless"); //Hide visibility
+                    //chromeOptions.LeaveBrowserRunning = false;
+                    //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
+
+                    var ip = new IPDetails().GetLocalIPv4(); //Server IP
+                    var port = AppConfig.Port;
+                    var serverUrl = "http://" + ip + ":" + port;
+                    driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
+                }
                 driver.Manage().Window.Maximize();
                 driver.Navigate().GoToUrl(url);
 
