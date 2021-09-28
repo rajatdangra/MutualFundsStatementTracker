@@ -31,6 +31,7 @@ namespace Mutual_Funds_Statement_Tracker
         internal static string Sync_Frequency => Convert.ToString(ConfigurationManager.AppSettings["Sync_Frequency"]);
         internal static bool IsForceToHttps => Convert.ToBoolean(ConfigurationManager.AppSettings["ForceToHttps"]);
         internal static string Port => Convert.ToString(ConfigurationManager.AppSettings["Port"]);
+        internal static string Key => Convert.ToString(ConfigurationManager.AppSettings["Key"]);
 
         public static void UpdateConfig(UserProfile defaultUserSettings)
         {

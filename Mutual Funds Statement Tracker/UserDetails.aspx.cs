@@ -37,7 +37,7 @@ namespace Mutual_Funds_Statement_Tracker
                     HttpCookie cookie = GetCookies();
                     if (cookie != null)
                     {
-                        string decryptedData = AESEncryption.DecryptAndroid(cookie["Data"]);
+                        string decryptedData = AESEncryption.AESDecryptText(cookie["Data"]);
                         if (decryptedData != null)
                         {
                             isDataInitialized = true;
@@ -208,7 +208,7 @@ namespace Mutual_Funds_Statement_Tracker
                 data.Append("FirstName" + "=" + firstname.Text + "&");
                 data.Append("LastName" + "=" + lastname.Text + "&");
                 data.Append("Phone" + "=" + phone.Text + "&");
-                var encryptedData = AESEncryption.EncryptAndroid(Convert.ToString(data));
+                var encryptedData = AESEncryption.AESEncryptText(Convert.ToString(data));
 
                 HttpCookie userInfo = new HttpCookie(cookieName);
                 userInfo.Secure = true;

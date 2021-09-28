@@ -10,9 +10,10 @@ namespace Mutual_Funds_Statement_Tracker.Models
     public class AESEncryption
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        const string key = "PasswordPassword";
+        static/*const*/ string key = AppConfig.Key;
+
         /* Android encryption */
-        public static string DecryptAndroid(string textToDecrypt)
+        public static string AESDecryptText(string textToDecrypt)
         {
             try
             {
@@ -37,12 +38,12 @@ namespace Mutual_Funds_Statement_Tracker.Models
             }
             catch (Exception ex)
             {
-                logger.Error("AESEncryption|DecryptAndroid:"+ex.Message);
+                logger.Error("AESEncryption:" + ex.Message);
                 return null;
             }
         }
 
-        public static string EncryptAndroid(string textToEncrypt)
+        public static string AESEncryptText(string textToEncrypt)
         {
             try
             {
@@ -73,7 +74,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
             }
         }
 
-        /*Android encyption */
+        /*AES encyption */
 
         /// <summary>
         /// Encrpyts the sourceString, returns this result as an Aes encrpyted, BASE64 encoded string
@@ -172,8 +173,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
             }
             catch (Exception ex)
             {
-               
-                   logger.Error("AESEncryption|AesCryptoServiceProvider:"+ex.Message);
+                logger.Error("AESEncryption|AesCryptoServiceProvider:" + ex.Message);
                 return null;
             }
         }
