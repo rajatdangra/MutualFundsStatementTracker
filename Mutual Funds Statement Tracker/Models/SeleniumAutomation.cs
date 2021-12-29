@@ -30,6 +30,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
             {
                 url = "http://" + url;
             }
+            IWebDriver driver = null;
             try
             {
                 ////Via JS
@@ -43,7 +44,6 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 //        "script", sb.ToString());
 
                 logger.Info("Start Navigating to RTA URL: " + url);
-                IWebDriver driver;
                 if (Debugger.IsAttached || !AppConfig.ShowAutomation)
                 {
                     //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
@@ -91,6 +91,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     /* Ignore the exception - NoSuchElementException that indicates that the element is not present */
                     fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
                     fluentWait.IgnoreExceptionTypes(typeof(ElementNotVisibleException));
+                    fluentWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
                     fluentWait.Message = "Element to be searched not found";
 
                     // Find the text input element by its id
@@ -127,6 +128,14 @@ namespace Mutual_Funds_Statement_Tracker.Models
                         withZeroRadioClick.Click();
 
                     IWebElement emailWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-0' and @placeholder='Email']")));
+
+                    //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.TimeOut)));
+                    ////wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException)); // ignore stale exception issues
+                    //wait.Until(ExpectedConditions.TextToBePresentInElementValue(emailWE, text));
+
+                    //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(50));
+                    //fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-0' and @placeholder='Email']")).Text.Length >= 6);
+
                     if (emailWE != null)
                         emailWE.SendKeys(user.Email);
 
@@ -190,6 +199,14 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 response.Message += "Statement generation not successful";
                 logger.Error(ex.Message + "\nInner Ex: " + ex.InnerException);
                 response.ErrorMessage = "<span style='color:red'>" + ex.Message + "</span>";
+            }
+            finally
+            {
+                if (driver != null)
+                {
+                    logger.Info("Closing Browser.");
+                    driver.Quit();
+                }
             }
 
             return response;
