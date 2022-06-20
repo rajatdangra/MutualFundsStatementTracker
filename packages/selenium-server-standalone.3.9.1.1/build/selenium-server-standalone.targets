@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SeleniumServerSrcPath>$(MSBuildThisFileDirectory)..\jar\selenium-server-standalone-3.9.1.jar</SeleniumServerSrcPath>
+    <SeleniumServerTargetPath>$(TargetDir)</SeleniumServerTargetPath>
+  </PropertyGroup>
+  <Target Name="CopySeleniumServerToBin" BeforeTargets="AfterBuild">
+    <Copy SourceFiles="$(SeleniumServerSrcPath)" DestinationFiles="$(SeleniumServerTargetPath)selenium-server-standalone-3.9.1.jar" SkipUnchangedFiles="true"></Copy>
+  </Target>
+  <Target Name="DeleteSeleniumServerFromBin" BeforeTargets="AfterClean">
+    <Delete Files="$(SeleniumServerTargetPath)selenium-server-standalone-3.9.1.jar"></Delete>
+  </Target>
+</Project>
