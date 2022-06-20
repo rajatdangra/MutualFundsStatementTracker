@@ -25,6 +25,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/BouncyCastle.Crypto.dll">
       <publishTime>02/19/2021 21:04:50</publishTime>
     </File>
+    <File Include="bin/chromedriver.exe">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
     <File Include="bin/MailKit.dll">
       <publishTime>03/16/2021 17:15:52</publishTime>
     </File>
@@ -32,22 +35,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/30/2021 14:47:58</publishTime>
     </File>
     <File Include="bin/MimeKit.dll">
-      <publishTime>03/12/2021 22:18:36</publishTime>
+      <publishTime>12/03/2021 22:18:36</publishTime>
     </File>
     <File Include="bin/MimeKit.pdb">
       <publishTime>05/30/2021 14:47:59</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.dll">
-      <publishTime>07/24/2021 17:36:10</publishTime>
+      <publishTime>06/21/2022 03:21:25</publishTime>
     </File>
     <File Include="bin/Mutual Funds Statement Tracker.pdb">
-      <publishTime>07/24/2021 17:36:10</publishTime>
+      <publishTime>06/21/2022 03:21:25</publishTime>
     </File>
     <File Include="bin/NLog.config">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>09/29/2021 01:33:39</publishTime>
     </File>
     <File Include="bin/NLog.dll">
-      <publishTime>03/24/2021 22:05:14</publishTime>
+      <publishTime>08/18/2021 22:05:52</publishTime>
+    </File>
+    <File Include="bin/selenium-server-standalone-3.9.1.jar">
+      <publishTime>06/21/2022 01:09:03</publishTime>
     </File>
     <File Include="bin/System.Buffers.dll">
       <publishTime>02/19/2020 10:05:18</publishTime>
@@ -56,28 +62,28 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/16/2017 08:01:58</publishTime>
     </File>
     <File Include="bin/WebDriver.dll">
-      <publishTime>10/31/2018 09:53:56</publishTime>
+      <publishTime>05/27/2022 20:52:32</publishTime>
     </File>
     <File Include="bin/WebDriver.Support.dll">
-      <publishTime>10/31/2018 09:54:02</publishTime>
+      <publishTime>05/27/2022 21:04:08</publishTime>
     </File>
     <File Include="Global.asax">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>04/05/2021 02:35:07</publishTime>
     </File>
     <File Include="NLog.config">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>09/29/2021 01:33:39</publishTime>
     </File>
     <File Include="Scripts/jquery-1.4.1-vsdoc.js">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>04/05/2021 02:35:07</publishTime>
     </File>
     <File Include="Scripts/jquery-1.4.1.js">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>04/05/2021 02:35:07</publishTime>
     </File>
     <File Include="Scripts/jquery-1.4.1.min.js">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>04/05/2021 02:35:07</publishTime>
     </File>
     <File Include="Styles/Site.css">
-      <publishTime>05/04/2021 02:35:07</publishTime>
+      <publishTime>04/05/2021 02:35:07</publishTime>
     </File>
     <File Include="Styles/UserDetails.css">
       <publishTime>05/30/2021 16:28:58</publishTime>
@@ -86,7 +92,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/20/2021 15:17:41</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/24/2021 17:36:10</publishTime>
+      <publishTime>06/21/2022 01:30:14</publishTime>
     </File>
   </ItemGroup>
 </Project>
