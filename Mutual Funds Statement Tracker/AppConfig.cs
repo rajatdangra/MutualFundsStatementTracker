@@ -23,6 +23,7 @@ namespace Mutual_Funds_Statement_Tracker
         internal static bool SaveUserDetails => String.Equals(ConfigurationManager.AppSettings["SaveUserDetails"], "1");
         internal static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
         internal static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
+        internal static string PageLoadTimeOut => Convert.ToString(ConfigurationManager.AppSettings["PageLoadTimeOut"]);
         internal static string RTA_URL => Convert.ToString(ConfigurationManager.AppSettings["RTA_URL"]);
         internal static bool IsAutomated => String.Equals(ConfigurationManager.AppSettings["IsAutomated"], "1");
         internal static bool ShowAutomation => String.Equals(ConfigurationManager.AppSettings["ShowAutomation"], "1");

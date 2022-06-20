@@ -46,7 +46,27 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 logger.Info("Start Navigating to RTA URL: " + url);
                 if (Debugger.IsAttached || !AppConfig.ShowAutomation)
                 {
-                    //IWebDriver driver = new ChromeDriver(driverService, chromeOptions);
+                    //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+
+                    //ChromeOptions options = new ChromeOptions();
+                    //options.AddArgument("--no-sandbox");
+                    ////options.AddArgument("--incognito"); //Opens in incognito mode
+                    ////options.AddArguments("--start-maximized"); //Maximize window
+                    //options.AddArguments("--display"); //Maximize window
+                    //                                   //options.AddArguments("--window-size=1920,1080"); //Set Window size
+                    //options.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
+                    //options.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
+                    //options.AddArgument("--disable-renderer-backgrounding");
+                    //options.AddArgument("--disable-headless-mode");
+                    //options.PageLoadStrategy = PageLoadStrategy.Eager;
+                    ////options.AddExcludedArgument("enable-automation"); // Hide Automated Warning
+                    ////options.AddAdditionalCapability("useAutomationExtension", false);
+                    ////options.AddArguments("--headless"); //Hide visibility
+                    ////options.LeaveBrowserRunning = false;
+                    ////options.AddAdditionalCapability(ChromeOptions.Capability);
+
+                    //driver = new ChromeDriver(driverService, options);
+
                     driver = new ChromeDriver();
                 }
                 else
@@ -55,6 +75,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     //driverService.HideCommandPromptWindow = true;
 
                     ChromeOptions chromeOptions = new ChromeOptions();
+                    //chromeOptions.AddArgument("--no-sandbox");
                     //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
                     //chromeOptions.AddArguments("--start-maximized"); //Maximize window
                     chromeOptions.AddArguments("--display"); //Maximize window
@@ -66,7 +87,6 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
                     //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
                     //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
-                    //chromeOptions.AddArgument("no-sandbox");
                     //chromeOptions.AddArguments("--headless"); //Hide visibility
                     //chromeOptions.LeaveBrowserRunning = false;
                     //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
@@ -77,6 +97,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
                 }
                 driver.Manage().Window.Maximize();
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.PageLoadTimeOut));
                 driver.Navigate().GoToUrl(url);
 
                 logger.Info("Navigate to RTA url successful. URL: " + url);
@@ -97,7 +118,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     // Find the text input element by its id
 
                     #region Accept T&C's
-                    IWebElement acceptRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id = 'mat-radio-2' and @value = 'ACCEPT']/label/div")));
+                    IWebElement acceptRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id = 'mat-radio-9' and @value = 'ACCEPT']/label/span")));
                     if (acceptRadioClick != null)
                     {
                         acceptRadioClick.Click();
@@ -107,9 +128,15 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     }
                     #endregion
 
+                    #region Important Alert
+                    IWebElement closeIcon = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='close-icon']/mat-icon")));
+                    if (closeIcon != null)
+                        closeIcon.Click();
+                    #endregion
+
                     #region Main Website
 
-                    IWebElement detailedRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-6' and @value = 'detailed']")));
+                    IWebElement detailedRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-3' and @value = 'detailed']")));
                     if (detailedRadioClick != null)
                         detailedRadioClick.Click();
 
@@ -118,12 +145,12 @@ namespace Mutual_Funds_Statement_Tracker.Models
                         specificPeriodRadioClick.Click();
 
                     //Set Start Date
-                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-8 ng-star-inserted", new DateTime(1990, 4, 1), ref response);
+                    SetCalendarDate(fluentWait, 1, new DateTime(1990, 4, 1), ref response);
 
                     //Set End Date
-                    SetCalendarDate(fluentWait, "mat-form-field-suffix ng-tns-c4-9 ng-star-inserted", DateTime.Now, ref response);
+                    SetCalendarDate(fluentWait, 2, DateTime.Now, ref response);
 
-                    IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-8' and @value = 'N']")));
+                    IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-5' and @value = 'N']")));
                     if (withZeroRadioClick != null)
                         withZeroRadioClick.Click();
 
@@ -212,24 +239,24 @@ namespace Mutual_Funds_Statement_Tracker.Models
             return response;
         }
 
-        private void SetCalendarDate(DefaultWait<IWebDriver> fluentWait, string className, DateTime date, ref SeleniumResponse response)
+        private void SetCalendarDate(DefaultWait<IWebDriver> fluentWait, int datePickerNo, DateTime date, ref SeleniumResponse response)
         {
             try
             {
                 logger.Info("Setting date: " + date.ToString("dd-MMM-yyyy"));
                 //*****Day selection started.
                 //Click Datepicker
-                IWebElement datePicker = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='" + className + "']/mat-datepicker-toggle/button[@aria-label='Open calendar']")));
+                IWebElement datePicker = fluentWait.Until(a => a.FindElement(By.XPath($"//mat-datepicker-toggle[@data-mat-calendar='mat-datepicker-{datePickerNo}']/button[@aria-label='Open calendar']")));
                 datePicker.Click();
 
                 int year = date.Year;
                 string monthBeginning = date.AddDays(-date.Day + 1).ToString("dd-MMM-yyyy");
                 string exactDateFormat = date.ToString("dd-MMM-yyyy");
 
-                IWebElement choseDate = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']")));
+                IWebElement choseDate = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']")));
                 choseDate.Click();
 
-                IWebElement yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                IWebElement yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']/span[@class='mat-button-wrapper']")));
                 string[] years = yearRange.Text.Split('–');
                 int startYear = Convert.ToInt32(years[0].Trim());
                 int endYear = Convert.ToInt32(years[1].Trim());
@@ -237,11 +264,11 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 IWebElement nextButton = null;
                 if (year < startYear)
                 {
-                    prevButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-previous-button mat-icon-button']")));
+                    prevButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-previous-button mat-icon-button mat-button-base']")));
                     while (year < startYear)
                     {
                         prevButton.Click();
-                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']/span[@class='mat-button-wrapper']")));
                         years = yearRange.Text.Split('–');
                         startYear = Convert.ToInt32(years[0].Trim());
                         endYear = Convert.ToInt32(years[1].Trim());
@@ -249,11 +276,11 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 }
                 else if (year > endYear)
                 {
-                    nextButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-next-button mat-icon-button']")));
+                    nextButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-next-button mat-icon-button mat-button-base']")));
                     while (year > endYear)
                     {
                         nextButton.Click();
-                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-calendar-period-button mat-button']/span[@class='mat-button-wrapper']")));
+                        yearRange = fluentWait.Until(a => a.FindElement(By.XPath("//button[@class='mat-focus-indicator mat-calendar-period-button mat-button mat-button-base']/span[@class='mat-button-wrapper']")));
                         years = yearRange.Text.Split('–');
                         startYear = Convert.ToInt32(years[0].Trim());
                         endYear = Convert.ToInt32(years[1].Trim());
