@@ -122,27 +122,41 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     if (acceptRadioClick != null)
                     {
                         acceptRadioClick.Click();
+                        logger.Info("Accept Radio button Clicked!");
+
                         IWebElement proceedButtonClick = fluentWait.Until(a => a.FindElement(By.XPath("//input[@type='button' and @value = 'PROCEED']")));
                         if (proceedButtonClick != null)
+                        {
                             proceedButtonClick.Click();
+                            logger.Info("Proceed button Clicked!");
+                        }
                     }
                     #endregion
 
                     #region Important Alert
                     IWebElement closeIcon = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='close-icon']/mat-icon")));
                     if (closeIcon != null)
+                    {
                         closeIcon.Click();
+                        logger.Info("Close Icon Clicked!");
+                    }
                     #endregion
 
                     #region Main Website
 
                     IWebElement detailedRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-3' and @value = 'detailed']")));
                     if (detailedRadioClick != null)
+                    {
                         detailedRadioClick.Click();
+                        logger.Info("Detailed Radio button Clicked!");
+                    }
 
                     IWebElement specificPeriodRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-14' and @value = 'SP']")));
                     if (specificPeriodRadioClick != null)
+                    {
                         specificPeriodRadioClick.Click();
+                        logger.Info("Specific Period Radio button Clicked!");
+                    }
 
                     //Set Start Date
                     SetCalendarDate(fluentWait, 1, new DateTime(1990, 4, 1), ref response);
@@ -152,7 +166,10 @@ namespace Mutual_Funds_Statement_Tracker.Models
 
                     IWebElement withZeroRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id='mat-radio-5' and @value = 'N']")));
                     if (withZeroRadioClick != null)
+                    {
                         withZeroRadioClick.Click();
+                        logger.Info("With Zero Radio button Clicked!");
+                    }
 
                     IWebElement emailWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-0' and @placeholder='Email']")));
 
@@ -164,25 +181,37 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     //fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-0' and @placeholder='Email']")).Text.Length >= 6);
 
                     if (emailWE != null)
+                    {
                         emailWE.SendKeys(user.Email);
+                        logger.Info("Email Set!");
+                    }
 
                     IWebElement panWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-1' and @placeholder='PAN']")));
                     if (panWE != null)
+                    {
                         panWE.SendKeys(user.PAN);
+                        logger.Info("PAN Set!");
+                    }
 
                     IWebElement passwordWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-2' and @placeholder='Password']")));
                     if (passwordWE != null)
+                    {
                         passwordWE.SendKeys(user.Password);
+                        logger.Info("Password Set!");
+                    }
 
                     IWebElement confirmPasswordWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-3' and @placeholder='Confirm Password']")));
                     if (confirmPasswordWE != null)
+                    {
                         confirmPasswordWE.SendKeys(user.Password);
+                        logger.Info("Confirm Password Set!");
+                    }
 
                     IWebElement submitButton = fluentWait.Until(a => a.FindElement(By.XPath("//button[@type='submit']")));
                     if (submitButton != null)
                     {
                         submitButton.Click();
-                        logger.Info("Request Details Submitted.");
+                        logger.Info("Request Details Submitted!");
                         //logger.Info("Waiting for 5 seconds to load page.");
                         //Thread.Sleep(5000);
                     }
@@ -191,9 +220,8 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     if (successReferenceNumber != null)
                     {
                         var successRefNoResponse = successReferenceNumber.Text;
-                        logger.Info("Automation on RTA url successful.");
+                        logger.Info($"Automation on RTA url successful. Success Reference Number: {successRefNoResponse}");
                         logger.Info(successRefNoResponse);
-                        response.Message += successRefNoResponse;
                         response.Message += successRefNoResponse;
                         response.IsSuccessfull = true;
                     }
