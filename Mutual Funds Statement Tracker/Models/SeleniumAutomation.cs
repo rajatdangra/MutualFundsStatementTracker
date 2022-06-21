@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace Mutual_Funds_Statement_Tracker.Models
@@ -98,8 +99,9 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 }
                 driver.Manage().Window.Maximize();
                 driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.PageLoadTimeOut));
-                driver.Navigate().GoToUrl(url);
 
+                logger.Info("Hitting URL: " + url);
+                driver.Navigate().GoToUrl(url);
                 logger.Info("Navigate to RTA url successful. URL: " + url);
 
                 try
@@ -112,6 +114,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     /* Ignore the exception - NoSuchElementException that indicates that the element is not present */
                     fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
                     fluentWait.IgnoreExceptionTypes(typeof(ElementNotVisibleException));
+                    fluentWait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException));
                     fluentWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
                     fluentWait.Message = "Element to be searched not found";
 
@@ -129,6 +132,8 @@ namespace Mutual_Funds_Statement_Tracker.Models
                         {
                             proceedButtonClick.Click();
                             logger.Info("Proceed button Clicked!");
+
+                            WaitForPageRefresh(waitTime: 1);
                         }
                     }
                     #endregion
@@ -189,6 +194,10 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     IWebElement panWE = fluentWait.Until(a => a.FindElement(By.XPath("//input[@Id='mat-input-1' and @placeholder='PAN']")));
                     if (panWE != null)
                     {
+                        panWE.Click();
+
+                        WaitForPageRefresh();
+                        
                         panWE.SendKeys(user.PAN);
                         logger.Info("PAN Set!");
                     }
@@ -212,8 +221,8 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     {
                         submitButton.Click();
                         logger.Info("Request Details Submitted!");
-                        //logger.Info("Waiting for 5 seconds to load page.");
-                        //Thread.Sleep(5000);
+
+                        WaitForPageRefresh();
                     }
 
                     IWebElement successReferenceNumber = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='success']/div/p")));
@@ -332,6 +341,13 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 logger.Error(ex.Message + "\nInner Ex: " + ex.InnerException);
                 response.ErrorMessage = "<span style='color:red'>" + ex.Message + "</span>";
             }
+        }
+
+        public void WaitForPageRefresh(int? waitTime = null)
+        {
+            int waitTimeInSeconds = waitTime.HasValue? waitTime.Value: Convert.ToInt32(AppConfig.PageLoadWaitTime);
+            logger.Info($"Waiting for {waitTimeInSeconds} seconds to load page.");
+            Thread.Sleep(TimeSpan.FromSeconds(waitTimeInSeconds));
         }
     }
 }
