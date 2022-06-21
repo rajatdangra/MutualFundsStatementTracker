@@ -85,7 +85,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
                     chromeOptions.AddArgument("--disable-renderer-backgrounding");
                     chromeOptions.AddArgument("--disable-headless-mode");
-                    chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
+                    chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal/*Eager*/;
                     //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
                     //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
                     //chromeOptions.AddArguments("--headless"); //Hide visibility
@@ -103,7 +103,9 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 logger.Info("Hitting URL: " + url);
                 driver.Navigate().GoToUrl(url);
                 logger.Info("Navigate to RTA url successful. URL: " + url);
-
+                
+                //WaitForPageRefresh();
+                
                 try
                 {
                     logger.Info("Automation on RTA url started, setting all inputs.");
@@ -124,6 +126,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     IWebElement acceptRadioClick = fluentWait.Until(a => a.FindElement(By.XPath("//mat-radio-button[@id = 'mat-radio-9' and @value = 'ACCEPT']/label/span")));
                     if (acceptRadioClick != null)
                     {
+                        logger.Info($"Accept Radio button Found! Enabled: {acceptRadioClick.Enabled}");
                         acceptRadioClick.Click();
                         logger.Info("Accept Radio button Clicked!");
 
@@ -133,7 +136,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                             proceedButtonClick.Click();
                             logger.Info("Proceed button Clicked!");
 
-                            WaitForPageRefresh(waitTime: 1);
+                            //WaitForPageRefresh(waitTime: 1);
                         }
                     }
                     #endregion
@@ -196,7 +199,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     {
                         panWE.Click();
 
-                        WaitForPageRefresh();
+                        //WaitForPageRefresh();
                         
                         panWE.SendKeys(user.PAN);
                         logger.Info("PAN Set!");
@@ -222,7 +225,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                         submitButton.Click();
                         logger.Info("Request Details Submitted!");
 
-                        WaitForPageRefresh();
+                        //WaitForPageRefresh();
                     }
 
                     IWebElement successReferenceNumber = fluentWait.Until(a => a.FindElement(By.XPath("//div[@class='success']/div/p")));
