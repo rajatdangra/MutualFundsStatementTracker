@@ -78,6 +78,15 @@ namespace Mutual_Funds_Statement_Tracker
         protected global::System.Web.UI.WebControls.TextBox password;
 
         /// <summary>
+        /// ShowPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ShowPassword;
+
+        /// <summary>
         /// firstname control.
         /// </summary>
         /// <remarks>

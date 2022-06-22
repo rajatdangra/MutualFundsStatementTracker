@@ -6,13 +6,36 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<h1>Mutual Funds Statement Request</h1>
+<h1><i><u>Mutual Funds Statement Request</u></i></h1>
 <head id="UserDetailsHeader" title="Mutual Funds Statement Request" runat="server">
     <title>User Details</title>
-</head>
-<body>
-    <form id="UserDetailsForm" runat="server" method="post" defaultfocus="submit_btn">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">  
+        $(document).ready(function () {
+            $('#show_password').hover(function show() {
+                //Change the attribute to text  
+                $('#password').attr('type', 'text');
+                $('.icon').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
+            },
+                function () {
+                    //Change the attribute back to password  
+                    $('#password').attr('type', 'password');
+                    $('.icon').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
+                });
+            //CheckBox Show Password  
+            $('#ShowPassword').click(function () {
+                $('#password').attr('type', $(this).is(':checked') ? 'text' : 'password');
+            });
+        });
+    </script>
 
+</head>
+<body style="margin-left: 10px; padding: 10px">
+    <form id="UserDetailsForm" runat="server" method="post" defaultfocus="submit_btn">
+        <br />
         <div id="UserDetailsFormError" runat="server" style="color: red">
             <span style="color: red">Please fill all mandatory fields.</span>
             <br />
@@ -22,7 +45,9 @@
         <input type="hidden" runat="server" id="rta_url" name="rta_url" />
         <table>
             <tr>
-                <td><b>Mandatory Parameters</b></td>
+                <td style="width:180px">
+                    <b><i><u>Mandatory Parameters</u></i></b>
+                </td>
             </tr>
             <tr>
                 <td>Email: </td>
@@ -36,15 +61,31 @@
             </tr>
             <tr>
                 <td>Password: </td>
-                <td colspan="3">
-                    <asp:TextBox ID="password" TextMode="Password" runat="server" /></td>
+                <td>
+                    <asp:TextBox ID="password" TextMode="Password" runat="server" />
+                </td>
+                <td>
+                    <button id="show_password" class="btn btn-primary" title="Hover on the eye to show/hide the password" type="button">
+                        <span class="fa fa-eye-slash icon"></span>
+                    </button>
+                </td>
+                <td>
+                    <span class="input-group-text">
+                        <asp:CheckBox ID="ShowPassword" runat="server" ToolTip="Check to show/hide the password" CssClass="checkbox"/>
+                    </span>
+                </td>
             </tr>
+        </table>
+        <br />
+        <table>
             <tr>
-                <td><b>Optional Parameters</b></td>
+                <td style="width:180px">
+                    <b><i><u>Optional Parameters</i></u></b>
+                </td>
             </tr>
             <tr>
                 <td>First Name: </td>
-                <td>
+                <td <%--colspan="2"--%>>
                     <asp:TextBox ID="firstname" runat="server" /></td>
                 <td>Last Name: </td>
                 <td>
