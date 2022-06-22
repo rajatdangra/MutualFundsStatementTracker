@@ -58,6 +58,7 @@ namespace Mutual_Funds_Statement_Tracker
                             email.Text = Params.Get("Email");
                             pan.Text = Params.Get("PAN");
                             password.Text = Params.Get("Password");
+                            password.Attributes["value"] = password.Text;
                             firstname.Text = Params.Get("FirstName");
                             lastname.Text = Params.Get("LastName");
                             phone.Text = Params.Get("Phone");
@@ -70,6 +71,7 @@ namespace Mutual_Funds_Statement_Tracker
                         email.Text = AppConfig.Email;
                         pan.Text = AppConfig.PAN;
                         password.Text = AppConfig.Password;
+                        password.Attributes["value"] = password.Text;
                         firstname.Text = AppConfig.FirstName;
                         lastname.Text = AppConfig.LastName;
                         phone.Text = AppConfig.Phone;

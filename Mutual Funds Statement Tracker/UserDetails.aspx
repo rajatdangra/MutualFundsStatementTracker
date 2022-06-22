@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Mutual Funds Statement Request" Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="Mutual_Funds_Statement_Tracker.MutualFundsStatementRequest" %>
 
-<%@Import namespace="Mutual_Funds_Statement_Tracker" %>
+<%@ Import Namespace="Mutual_Funds_Statement_Tracker" %>
 <link href="Styles/UserDetails.css" rel="stylesheet" />
 
 <!DOCTYPE html>
@@ -37,7 +37,7 @@
             <tr>
                 <td>Password: </td>
                 <td colspan="3">
-                    <asp:TextBox ID="password" runat="server" /></td>
+                    <asp:TextBox ID="password" TextMode="Password" runat="server" /></td>
             </tr>
             <tr>
                 <td><b>Optional Parameters</b></td>
@@ -66,8 +66,8 @@
         </table>
         <br />
         <%--<asp:Button ID="submit_btn" Text="Submit" Width="120px" BackColor="#3399ff" BorderColor="Black" ForeColor="White" Font-Bold="true" runat="server" OnClick="OnSubmitButtonClicked" ToolTip="Submit details to RTA Url"  CssClass="button"/>--%>
-        <div style="padding-bottom:20px;">
-            <button ID="submit_btn"  class="button" title="Submit details to RTA Url" onserverclick="OnSubmitButtonClicked" runat="server">Submit</button>
+        <div style="padding-bottom: 20px;">
+            <button id="submit_btn" class="button" title="Submit details to RTA Url" onserverclick="OnSubmitButtonClicked" runat="server">Submit</button>
         </div>
         <div style="padding-top: 20px; color: green" id="UserDetailsResponse" runat="server">
             <span style="color: greenyellow"></span>
