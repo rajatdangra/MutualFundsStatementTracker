@@ -9,7 +9,7 @@
 <h1><i><u>Mutual Funds Statement Request</u></i></h1>
 <head id="UserDetailsHeader" title="Mutual Funds Statement Request" runat="server">
     <title>User Details</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -21,8 +21,10 @@
                 $('.icon').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
             },
                 function () {
-                    //Change the attribute back to password  
-                    $('#password').attr('type', 'password');
+                    if (!$('#ShowPassword').is(':checked')) {
+                        //Change the attribute back to password
+                        $('#password').attr('type', 'password');
+                    }
                     $('.icon').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
                 });
             //CheckBox Show Password  
@@ -45,7 +47,7 @@
         <input type="hidden" runat="server" id="rta_url" name="rta_url" />
         <table>
             <tr>
-                <td style="width:180px">
+                <td style="width: 180px">
                     <b><i><u>Mandatory Parameters</u></i></b>
                 </td>
             </tr>
@@ -71,7 +73,7 @@
                 </td>
                 <td>
                     <span class="input-group-text">
-                        <asp:CheckBox ID="ShowPassword" runat="server" ToolTip="Check to show/hide the password" CssClass="checkbox"/>
+                        <asp:CheckBox ID="ShowPassword" runat="server" ToolTip="Check to show/hide the password" CssClass="checkbox" />
                     </span>
                 </td>
             </tr>
@@ -79,7 +81,7 @@
         <br />
         <table>
             <tr>
-                <td style="width:180px">
+                <td style="width: 180px">
                     <b><i><u>Optional Parameters</i></u></b>
                 </td>
             </tr>

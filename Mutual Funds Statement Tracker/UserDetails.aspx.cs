@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Web.UI;
 using System.Threading.Tasks;
 using Mutual_Funds_Statement_Tracker.Models;
+using System.Diagnostics;
 
 namespace Mutual_Funds_Statement_Tracker
 {
@@ -66,7 +67,7 @@ namespace Mutual_Funds_Statement_Tracker
                         saveUserDetails.Checked = AppConfig.SaveUserDetails;
                     }
 
-                    if (!isDataInitialized)
+                    if (!isDataInitialized && (Debugger.IsAttached || !AppConfig.SkipDefaultValues))
                     {
                         email.Text = AppConfig.Email;
                         pan.Text = AppConfig.PAN;
@@ -146,7 +147,7 @@ namespace Mutual_Funds_Statement_Tracker
 
                     logger.Info("Details Submitted. Navigating to RTA website.");
 
-                    var response = new SeleniumAutomation().Navigate(rta_url.Value, user);
+                    var response = new SeleniumAutomation(rta_url.Value).Navigate(user);
 
                     UserDetailsResponse.InnerText = response.Message;
                     UserDetailsResponse.Visible = true;

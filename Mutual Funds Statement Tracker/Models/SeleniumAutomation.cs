@@ -16,21 +16,24 @@ namespace Mutual_Funds_Statement_Tracker.Models
     public class SeleniumAutomation
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        public SeleniumAutomation()
+        private readonly string _url;
+        public SeleniumAutomation(string url)
         {
+            _url = url;
+            if (!_url.StartsWith("http://") &&
+                !_url.StartsWith("https://"))
+            {
+                _url = "http://" + _url;
+            }
         }
 
-        public SeleniumResponse Navigate(String url, UserProfile user)
+        public SeleniumResponse Navigate(UserProfile user)
         {
             var response = new SeleniumResponse();
             response.Message = "[" + DateTime.Now.ToDetailString() + "]: ";
-            if (String.IsNullOrEmpty(url)) return response;
-            if (url.Equals("about:blank")) return response;
-            if (!url.StartsWith("http://") &&
-                !url.StartsWith("https://"))
-            {
-                url = "http://" + url;
-            }
+            if (String.IsNullOrEmpty(_url)) return response;
+            if (_url.Equals("about:blank")) return response;
+            
             IWebDriver driver = null;
             try
             {
@@ -44,7 +47,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 //ClientScript.RegisterStartupScript(this.GetType(),
                 //        "script", sb.ToString());
 
-                logger.Info("Start Navigating to RTA URL: " + url);
+                logger.Info("Start Navigating to RTA URL: " + _url);
                 if (Debugger.IsAttached || !AppConfig.ShowAutomation)
                 {
                     //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
@@ -109,9 +112,9 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 driver.Manage().Window.Maximize();
                 driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.PageLoadTimeOut));
 
-                logger.Info("Hitting URL: " + url);
-                driver.Navigate().GoToUrl(url);
-                logger.Info("Navigate to RTA url successful. URL: " + url);
+                logger.Info("Hitting URL: " + _url);
+                driver.Navigate().GoToUrl(_url);
+                logger.Info("Navigate to RTA url successful. URL: " + _url);
 
                 //WaitForPageRefresh();
 

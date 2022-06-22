@@ -23,6 +23,7 @@ namespace Mutual_Funds_Statement_Tracker
         internal static string FullName => FirstName + (string.IsNullOrWhiteSpace(FirstName) ? "" : " ") + LastName;
         internal static string CookieExpiry => Convert.ToString(ConfigurationManager.AppSettings["CookieExpiry"]);
         internal static bool SaveUserDetails => String.Equals(ConfigurationManager.AppSettings["SaveUserDetails"], "1");
+        internal static bool SkipDefaultValues => String.Equals(ConfigurationManager.AppSettings["SkipDefaultValues"], "1");
         internal static string PollingTime => Convert.ToString(ConfigurationManager.AppSettings["PollingTime"]);
         internal static string TimeOut => Convert.ToString(ConfigurationManager.AppSettings["TimeOut"]);
         internal static string PageLoadTimeOut => Convert.ToString(ConfigurationManager.AppSettings["PageLoadTimeOut"]);
