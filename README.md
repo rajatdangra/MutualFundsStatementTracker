@@ -32,6 +32,7 @@ _In **App.Config**_: (Highly Recommended not to update these settings)
 
 
 ### <ins>***Application Demo***</ins>:
+[Click Here To Watch The Demo](https://youtu.be/XmgppEFptWY)
 1. Web App Inputs-
 ![Application_Default](data/Images/Automation_Inputs.PNG)
 2. CAMS Website-
