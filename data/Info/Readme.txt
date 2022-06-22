@@ -8,3 +8,11 @@ Start web application - you will see the automation.
 
 Links:
 https://www.selenium.dev/documentation/legacy/selenium_2/remote_server/
+
+
+
+
+Instructions to generate Certificate:
+https://www.snel.com/support/lets-encrypt-on-windows-server-2016/
+
+Host website on ClouDNS

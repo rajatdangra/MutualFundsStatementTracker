@@ -13,8 +13,10 @@ namespace Mutual_Funds_Statement_Tracker
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         internal static string Email => Convert.ToString(ConfigurationManager.AppSettings["Email"]);
+        internal static string SampleEmail => "abc@gmail.com";
         internal static string Password => Convert.ToString(ConfigurationManager.AppSettings["Password"]);
         internal static string PAN => Convert.ToString(ConfigurationManager.AppSettings["PAN"]);
+        internal static string SamplePAN => "ABCDE1234F";
         internal static string Phone => Convert.ToString(ConfigurationManager.AppSettings["Phone"]);
         internal static string FirstName => Convert.ToString(ConfigurationManager.AppSettings["FirstName"]);
         internal static string LastName => Convert.ToString(ConfigurationManager.AppSettings["LastName"]);

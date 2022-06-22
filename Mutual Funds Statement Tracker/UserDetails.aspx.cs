@@ -167,12 +167,16 @@ namespace Mutual_Funds_Statement_Tracker
             if (!IsValidEmail(email.Text))
             {
                 isValid = false;
-                errorMsg += email.Text + " is an Invalid Email Address.";
+                if (string.IsNullOrWhiteSpace(errorMsg))
+                    errorMsg += "\n";
+                errorMsg += $"{email.Text} is an Invalid Email Address. Sample Email format: {AppConfig.SampleEmail}";
             }
             if (!IsValidPAN(pan.Text))
             {
                 isValid = false;
-                errorMsg += pan.Text + " is an Invalid PAN.";
+                if (string.IsNullOrWhiteSpace(errorMsg))
+                    errorMsg += "\n";
+                errorMsg += $"{pan.Text} is an Invalid PAN. Sample PAN format: {AppConfig.SamplePAN}";
             }
             if (!string.IsNullOrEmpty(errorMsg))
             {
