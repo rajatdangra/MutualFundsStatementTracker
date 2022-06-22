@@ -95,7 +95,16 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     var ip = new IPDetails().GetLocalIPv4(); //Server IP
                     var port = AppConfig.Port;
                     var serverUrl = "http://" + ip + ":" + port;
-                    driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
+                    try
+                    {
+                        driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Info($"ShowAutomation via RemoteWebDriver failed: {ex.Message}\nInner Ex: {ex.InnerException}");
+                        logger.Info($"Initiating Automation via ChromeDriver");
+                        driver = new ChromeDriver();
+                    }
                 }
                 driver.Manage().Window.Maximize();
                 driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Convert.ToInt32(AppConfig.PageLoadTimeOut));
@@ -103,9 +112,9 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 logger.Info("Hitting URL: " + url);
                 driver.Navigate().GoToUrl(url);
                 logger.Info("Navigate to RTA url successful. URL: " + url);
-                
+
                 //WaitForPageRefresh();
-                
+
                 try
                 {
                     logger.Info("Automation on RTA url started, setting all inputs.");
@@ -199,8 +208,8 @@ namespace Mutual_Funds_Statement_Tracker.Models
                     {
                         panWE.Click();
 
-                        //WaitForPageRefresh();
-                        
+                        WaitForPageRefresh(); //page loads after email
+
                         panWE.SendKeys(user.PAN);
                         logger.Info("PAN Set!");
                     }
@@ -348,7 +357,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
 
         public void WaitForPageRefresh(int? waitTime = null)
         {
-            int waitTimeInSeconds = waitTime.HasValue? waitTime.Value: Convert.ToInt32(AppConfig.PageLoadWaitTime);
+            int waitTimeInSeconds = waitTime.HasValue ? waitTime.Value : Convert.ToInt32(AppConfig.PageLoadWaitTime);
             logger.Info($"Waiting for {waitTimeInSeconds} seconds to load page.");
             Thread.Sleep(TimeSpan.FromSeconds(waitTimeInSeconds));
         }
