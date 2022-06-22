@@ -32,6 +32,15 @@
                 $('#password').attr('type', $(this).is(':checked') ? 'text' : 'password');
             });
         });
+
+        function IsCapsLockOn(event) {
+            if (event.getModifierState("CapsLock")) {  // If "caps lock" is pressed, display the warning text
+                document.getElementById("spnWarning").style.display = "block";
+            }
+            else {
+                document.getElementById("spnWarning").style.display = "none";
+            }
+        }
     </script>
 
 </head>
@@ -64,7 +73,7 @@
             <tr>
                 <td>Password: </td>
                 <td>
-                    <asp:TextBox ID="password" TextMode="Password" runat="server" />
+                    <asp:TextBox ID="password" TextMode="Password" runat="server" onclick="IsCapsLockOn(event)" onkeyup="IsCapsLockOn(event)"/>
                 </td>
                 <td>
                     <button id="show_password" class="btn btn-primary" title="Hover on the eye to show/hide the password" type="button">
@@ -77,6 +86,7 @@
                     </span>
                 </td>
             </tr>
+            <tr><td colspan="2"><span id="spnWarning" style='display:none;color:red'>WARNING! Caps lock is ON.</span></td></tr>
         </table>
         <br />
         <table>
