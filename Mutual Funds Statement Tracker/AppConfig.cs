@@ -38,6 +38,7 @@ namespace Mutual_Funds_Statement_Tracker
         internal static bool IsForceToHttps => Convert.ToBoolean(ConfigurationManager.AppSettings["ForceToHttps"]);
         internal static string Port => Convert.ToString(ConfigurationManager.AppSettings["Port"]);
         internal static string Key => Convert.ToString(ConfigurationManager.AppSettings["Key"]);
+        internal static bool SendEmail => String.Equals(ConfigurationManager.AppSettings["SendEmail"], "1");
 
         public static void UpdateConfig(UserProfile defaultUserSettings)
         {

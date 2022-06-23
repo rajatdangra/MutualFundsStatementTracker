@@ -57,8 +57,11 @@ namespace Mutual_Funds_Statement_Tracker
             logger.Error(detailedErrorInfo);
             Console.WriteLine(detailedErrorInfo);
 
-            var emailObj = new Email("Mutual Fund Statement Request - Error Occured", Email.DeveloperEmail, Email.DeveloperName, isHTMLBody: false);
-            emailObj.SendEmail(detailedErrorInfo);
+            if (AppConfig.SendEmail)
+            {
+                var emailObj = new EmailNotifier("Mutual Fund Statement Request - Error Occured", EmailNotifier.DeveloperEmail, EmailNotifier.DeveloperName, isHTMLBody: false);
+                emailObj.Notify(detailedErrorInfo);
+            }
         }
 
         void Session_Start(object sender, EventArgs e)
