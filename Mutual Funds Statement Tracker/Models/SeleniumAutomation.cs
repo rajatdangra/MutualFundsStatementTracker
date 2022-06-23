@@ -48,65 +48,49 @@ namespace Mutual_Funds_Statement_Tracker.Models
                 //        "script", sb.ToString());
 
                 logger.Info("Start Navigating to RTA URL: " + _url);
+
+                ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+                //driverService.HideCommandPromptWindow = true;
+
+                ChromeOptions chromeOptions = new ChromeOptions();
+                //chromeOptions.AddArgument("--no-sandbox");
+                //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
+                //chromeOptions.AddArguments("--start-maximized"); //Maximize window
+                chromeOptions.AddArguments("--display"); //Maximize window
+                                                         //chromeOptions.AddArguments("--window-size=1920,1080"); //Set Window size
+                chromeOptions.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
+                chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
+                chromeOptions.AddArgument("--disable-renderer-backgrounding");
+                chromeOptions.AddArgument("--disable-headless-mode");
+                //chromeOptions.EnableMobileEmulation("OnePlus 6"); //For mobile emulation
+                chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal/*Eager*/;
+                //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
+                //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
+                //chromeOptions.AddArguments("--headless"); //Hide visibility
+                //chromeOptions.LeaveBrowserRunning = false;
+                //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
+
                 if (Debugger.IsAttached || !AppConfig.ShowAutomation)
                 {
-                    //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+                    driver = new ChromeDriver(driverService, chromeOptions);
 
-                    //ChromeOptions options = new ChromeOptions();
-                    //options.AddArgument("--no-sandbox");
-                    ////options.AddArgument("--incognito"); //Opens in incognito mode
-                    ////options.AddArguments("--start-maximized"); //Maximize window
-                    //options.AddArguments("--display"); //Maximize window
-                    //                                   //options.AddArguments("--window-size=1920,1080"); //Set Window size
-                    //options.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
-                    //options.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
-                    //options.AddArgument("--disable-renderer-backgrounding");
-                    //options.AddArgument("--disable-headless-mode");
-                    //options.PageLoadStrategy = PageLoadStrategy.Eager;
-                    ////options.AddExcludedArgument("enable-automation"); // Hide Automated Warning
-                    ////options.AddAdditionalCapability("useAutomationExtension", false);
-                    ////options.AddArguments("--headless"); //Hide visibility
-                    ////options.LeaveBrowserRunning = false;
-                    ////options.AddAdditionalCapability(ChromeOptions.Capability);
-
-                    //driver = new ChromeDriver(driverService, options);
-
-                    driver = new ChromeDriver();
+                    //driver = new ChromeDriver();
                 }
                 else
                 {
-                    //ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
-                    //driverService.HideCommandPromptWindow = true;
-
-                    ChromeOptions chromeOptions = new ChromeOptions();
-                    //chromeOptions.AddArgument("--no-sandbox");
-                    //chromeOptions.AddArgument("--incognito"); //Opens in incognito mode
-                    //chromeOptions.AddArguments("--start-maximized"); //Maximize window
-                    chromeOptions.AddArguments("--display"); //Maximize window
-                                                             //chromeOptions.AddArguments("--window-size=1920,1080"); //Set Window size
-                    chromeOptions.AddArgument("--disable-notifications"); //Disable Popup Site Notifications
-                    chromeOptions.AddArgument("--disable-popup-blocking"); //Disables pop-ups displayed
-                    chromeOptions.AddArgument("--disable-renderer-backgrounding");
-                    chromeOptions.AddArgument("--disable-headless-mode");
-                    chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal/*Eager*/;
-                    //chromeOptions.AddExcludedArgument("enable-automation"); // Hide Automated Warning
-                    //chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
-                    //chromeOptions.AddArguments("--headless"); //Hide visibility
-                    //chromeOptions.LeaveBrowserRunning = false;
-                    //chromeOptions.AddAdditionalCapability(ChromeOptions.Capability);
-
                     var ip = new IPDetails().GetLocalIPv4(); //Server IP
                     var port = AppConfig.Port;
                     var serverUrl = "http://" + ip + ":" + port;
                     try
                     {
                         driver = new RemoteWebDriver(new Uri(serverUrl + "/wd/hub"), chromeOptions);
+                        //An object of RemoteWebDriver is initiated because the automation is to be run on a remote device, not on the local computer.
                     }
                     catch (Exception ex)
                     {
                         logger.Info($"ShowAutomation via RemoteWebDriver failed: {ex.Message}\nInner Ex: {ex.InnerException}");
                         logger.Info($"Initiating Automation via ChromeDriver");
-                        driver = new ChromeDriver();
+                        driver = new ChromeDriver(driverService, chromeOptions);
                     }
                 }
                 driver.Manage().Window.Maximize();
