@@ -18,7 +18,7 @@ namespace Mutual_Funds_Statement_Tracker.Models
         internal static string DeveloperName = PrivateData.DeveloperName;
         private static string FromEmail = PrivateData.FromEmail;
         private static string FromName = "Mutual Funds Statement Request";
-        private static string Password = PrivateData.MailPass;
+        private static string Password = PrivateData.AppPass/*.MailPass*/;
         
         public EmailNotifier(string subject, string mailIdsTo, string fullNameTo, List<string> files = null, bool isHTMLBody = false)
         {
