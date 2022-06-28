@@ -153,7 +153,14 @@ namespace Mutual_Funds_Statement_Tracker
                     UserDetailsResponse.Visible = true;
 
                     if (!response.IsSuccessfull)
+                    {
                         Response.Write(response.ErrorMessage);
+                        UserDetailsResponse.Style["color"] = "red";
+                    }
+                    else
+                    {
+                        UserDetailsResponse.Style["color"] = "green";
+                    }
                 }
             }
             catch (Exception ex)
